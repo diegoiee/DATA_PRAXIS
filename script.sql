@@ -57,7 +57,7 @@ CREATE TABLE [DATA_PRAXIS].[AFILIADOS](
     [id_afiliado_principal] [varchar](20) NOT NULL,
     [id_afiliado_sufijo] [varchar](20) NOT NULL,
     [apellido] [varchar](20) NOT NULL,
-    [dirección_completa] [varchar](20) NOT NULL,
+    [direccion_completa] [varchar](20) NOT NULL,
     [telefono] [varchar](20) NOT NULL,
     [mail] [varchar](20) NOT NULL,
     [fecha_nacimiento] [varchar](20) NOT NULL,
