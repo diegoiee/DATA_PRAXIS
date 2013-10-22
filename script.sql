@@ -13,8 +13,8 @@ Ejemplo de como crear una FOREIGN KEY que hace referencia a la primary key de PE
 CREATE TABLE PEPITO2(
 CAMPO1 varchar(30) not null,
 CAMPO2 varchar(20) not null,
-CAMPO3 varchar(30) not null 
-FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
+CAMPO3 varchar(30) not null, 
+CONSTRAINT nombreConstraint2 FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
 )
 
 */
