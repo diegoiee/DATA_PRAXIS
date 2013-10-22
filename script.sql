@@ -33,7 +33,6 @@ END
 --Otro ejemplo de SP usando transacciones y try catch
 
 CREATE PROCEDURE asd
-	-- Add the parameters for the stored procedure here
 	@param1 varchar(20)
 AS
 BEGIN
