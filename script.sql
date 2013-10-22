@@ -1,6 +1,28 @@
+/*
+Ejemplo de como crear una tabla con primary key simple o compuesta
+
+CREATE TABLE PEPITO1(
+CAMPO1 varchar(30) not null,
+CAMPO2 varchar(20) not null,
+CAMPO3 varchar(20) not null,
+CONSTRAINT nombreConstraint PRIMARY KEY(campo1)
+)
+
+Ejemplo de como crear una FOREIGN KEY que hace referencia a la primary key de PEPITO1
+
+CREATE TABLE PEPITO2(
+CAMPO1 varchar(30) not null,
+CAMPO2 varchar(20) not null,
+CAMPO3 varchar(30) not null 
+FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
+)
+
+*/
+
+
 CREATE TABLE [DATA_PRAXIS].[USUARIOS](
     [id_usuario] [varchar](20) NOT NULL,
-    [password] [varchar](20) NOT NULL,
+    [password] [varchar](20) NOT NULL
 )
 
 
