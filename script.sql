@@ -43,7 +43,7 @@ BEGIN
 		COMMIT
 	END TRY
 
-	BEGIN CATCH
+	BEGIN CATCH --el catch captura antes que el transaction el error, por ende si no hago el rollback en el catch quedara sin hacerse
 		PRINT 'ERROR'
 		ROLLBACK
 	END CATCH
