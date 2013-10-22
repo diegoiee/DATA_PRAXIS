@@ -73,7 +73,7 @@ CREATE TABLE [DATA_PRAXIS].[AFILIADOS](
 
 
 CREATE TABLE [DATA_PRAXIS].[HISTORIAL_CAMBIOS_PLANES](
-    [fecha_modificación] [varchar](20) NOT NULL,
+    [fecha_modificacion] [varchar](20) NOT NULL,
     [id_usuario] [varchar](20) NOT NULL,
     [id_plan_viejo] [varchar](20) NOT NULL,
     [id_plan_nuevo] [varchar](20) NOT NULL,
