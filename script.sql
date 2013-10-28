@@ -233,6 +233,11 @@ CREATE TABLE [DATA_PRAXIS].[CONSULTA](
     [diagnostico] [varchar](20) NOT NULL
 )
 
+CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD]( --OK
+    [id_tipo_especialidad] NUMERIC(18,0) IDENTITY (1,1) PRIMARY KEY,
+    [descripcion_tipo_especialidad] [varchar](255) NOT NULL
+)
+
 
 CREATE TABLE [DATA_PRAXIS].[TURNOS_DISPONIBLES](
 
