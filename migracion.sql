@@ -9,7 +9,7 @@ Estaria bueno poder en una misma consulta migrar varias tablas,
 recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
 */
 
---DATOS_PERSONA
+--PERSONA
 -------------
 INSERT INTO datos_persona
 
@@ -23,7 +23,7 @@ FROM profesionales
 
 
 
---AFILIADOS (joineo los datos personales contra la tabla maestra)
+--AFILIADO (joineo los datos personales contra la tabla maestra)
 ---------
 
 INSERT INTO AFILIADOS
@@ -34,7 +34,7 @@ WHERE a.dni = b.dni
 
 
 
---PROFESIONALES (joineo los datos personales contra la tabla maestra)
+--PROFESIONAL (joineo los datos personales contra la tabla maestra)
 -------------
 
 INSERT INTO AFILIADOS
@@ -53,7 +53,7 @@ SELECT distinct id_tipo_especialidad, descripcion_tipo_especialidad
 FROM maestra
 
 
---ESPECIALIDADES
+--ESPECIALIDAD
 --------------
 
 INSERT INTO ESPECIALIDADES
@@ -62,7 +62,7 @@ SELECT distinct id_especialidad, id_tipo_especialidad, descripcion_especialidad
 FROM maestra
 
 
---MEDICAMENTOS
+--MEDICAMENTO
 ------------
 
 INSERT INTO MEDICAMENTOS
