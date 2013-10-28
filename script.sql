@@ -265,3 +265,44 @@ CREATE TABLE [DATA_PRAXIS].[RECETAS_MEDICAS](
 falta completar...
 
 )
+
+
+--*/*/*/*/*/-----------------------*/*/*/*/*/*/
+	       	MIGRACION
+--*/*/*/*/*/-----------------------*/*/*/*/*/*/
+
+DATOS_PERSONA
+-------------
+INSERT INTO datos_persona
+
+SELECT datos_profesionales_persona
+FROM maestra
+
+UNION
+
+SELECT datos_pacientes_persona
+FROM profesionales
+
+
+
+
+AFILIADOS (joineo los datos personales contra la tabla maestra)
+---------
+
+INSERT INTO AFILIADOS
+
+SELECT funcion_obtener_id_afiliado,  a.id_plan_medico, 0 (nro_bono_consulta arranca en 0), b.id_persona, NULL
+FROM maestra a, datos_persona b
+WHERE a.dni = b.dni
+
+
+
+
+PROFESIONALES (joineo los datos personales contra la tabla maestra)
+-------------
+
+INSERT INTO AFILIADOS
+
+SELECT a.id_plan_medico, b.id_persona, NULL(matricula), NULL(fecha_baja)
+FROM maestra a, datos_persona b
+WHERE a.dni = b.dni
