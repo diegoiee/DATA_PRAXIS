@@ -69,7 +69,7 @@ id_estado_civil TINYINT PRIMARY KEY,
 descripcion_estado_civil VARCHAR(255) NOT NULL
 )
 
-CREATE TABLE DATA_PRAXIS.PLANES_MEDICO ( --OK
+CREATE TABLE DATA_PRAXIS.PLANES_MEDICOS ( --OK
 id_plan_medico numeric(18,0) PRIMARY KEY, 
 desc_plan_medico VARCHAR(255) NULL,
 precio_consulta numeric(18,0), 
@@ -140,26 +140,6 @@ CREATE TABLE [DATA_PRAXIS].[ROLES_FUNCIONES](
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[AFILIADOS](
-    [id_usuario] [varchar](20) NOT NULL,
-    [nombre] [varchar](20) NOT NULL,
-    [id_afiliado_principal] [varchar](20) NOT NULL,
-    [id_afiliado_sufijo] [varchar](20) NOT NULL,
-    [apellido] [varchar](20) NOT NULL,
-    [direccion_completa] [varchar](20) NOT NULL,
-    [telefono] [varchar](20) NOT NULL,
-    [mail] [varchar](20) NOT NULL,
-    [fecha_nacimiento] [varchar](20) NOT NULL,
-    [sexo] [varchar](20) NOT NULL,
-    [estado_civil] [varchar](20) NOT NULL,
-    [cantidad_familiares_a_cargo] [varchar](20) NOT NULL,
-    [id_plan_medico] [varchar](20) NOT NULL,
-    [cantidad_bonos_consulta] [varchar](20) NOT NULL,
-    [tipo_documento] [varchar](20) NOT NULL,
-    [numero_documento] [varchar](20) NOT NULL,
-    [estado_afiliado] [varchar](20) NOT NULL
-)
-
 
 CREATE TABLE [DATA_PRAXIS].[HISTORIAL_CAMBIOS_PLANES](
     [fecha_modificacion] [varchar](20) NOT NULL,
@@ -191,16 +171,16 @@ CREATE TABLE [DATA_PRAXIS].[PROFESIONALES_ESPECIALIDAD](
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES](
-    [id_especialidad] [varchar](20) NOT NULL,
-    [id_tipo_especialidad] [varchar](20) NOT NULL
-    [descripcion_especialidad] [varchar](20) NOT NULL
+CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
+    [id_especialidad] INT IDENTITY (1,1) PRIMARY KEY,
+    [id_tipo_especialidad] INT FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
+    [descripcion_especialidad] [varchar](255) NOT NULL
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD](
-    [id_tipo_especialidad] [varchar](20) NOT NULL
-    [descripcion_tipo_especialidad] [varchar](20) NOT NULL
+    [id_tipo_especialidad] INT IDENTITY (1,1) PRIMARY KEY,
+    [descripcion_tipo_especialidad] [varchar](255) NOT NULL
 )
 
 
