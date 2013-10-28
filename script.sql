@@ -69,6 +69,21 @@ id_estado_civil TINYINT PRIMARY KEY,
 descripcion_estado_civil VARCHAR(255) NOT NULL
 )
 
+CREATE TABLE [DATA_PRAXIS].[DATOS_PERSONA](
+        [id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPOS_DOCUMENTOS](id_tipo_documento),
+        [numero_documento] [NUMERIC](18,0) NOT NULL,
+        [nombre] [varchar](255)  not null,
+        [apellido] [varchar](255) not null,
+        [telefono] [numeric](18,0) not null,
+        [mail] [varchar](255) not null,
+        [fecha_nacimiento] [DATETIME] not null,
+        [id_sexo][TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[SEXO] (id_sexo),
+        [cantidad_familiares_a_cargo][int] not null DEFAULT 0,
+        [id_estado_civil] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_CIVIL](id_estado_civil)
+)
+
+
 CREATE TABLE [DATA_PRAXIS].[USUARIOS](
     [id_usuario] [varchar](20) NOT NULL,
     [password] [varchar](20) NOT NULL
