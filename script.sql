@@ -59,6 +59,10 @@ id_tipo_documento TINYINT PRIMARY KEY,
 tipo_documento VARCHAR(255) NOT NULL
 )
 
+CREATE TABLE  DATA_PRAXIS.Sexo ( --OK
+id_sexo TINYINT PRIMARY KEY,
+descripcion_sexo VARCHAR(255) NOT NULL
+)
 
 CREATE TABLE [DATA_PRAXIS].[USUARIOS](
     [id_usuario] [varchar](20) NOT NULL,
