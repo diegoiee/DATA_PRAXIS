@@ -1,58 +1,4 @@
-/*
---Ejemplo de como crear una tabla con primary key simple o compuesta
-
-CREATE TABLE PEPITO1(
-	CAMPO1 varchar(30) not null,
-	CAMPO2 varchar(20) not null,
-	CAMPO3 varchar(20) not null,
-	CONSTRAINT nombreConstraint PRIMARY KEY(campo1)
-)
-
---Ejemplo de como crear una FOREIGN KEY que hace referencia a la primary key de PEPITO1
-
-CREATE TABLE PEPITO2(
-	CAMPO1 varchar(30) not null,
-	CAMPO2 varchar(20) not null,
-	CAMPO3 varchar(30) not null, 
-	CONSTRAINT nombreConstraint2 FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
-)
-
-*/
-
-/*
-
---Ejemplo simple para crear Stored Procedures (SP)
-
-CREATE PROCEDURE nombreSP
-	@param1 varchar(20) --parametros
-AS
-BEGIN
-	INSERT INTO dbo.PEPITO values(@param1,@param1,@param1)
-END
-
---Otro ejemplo de SP usando transacciones y try catch
-
-CREATE PROCEDURE asd
-	@param1 varchar(20)
-AS
-BEGIN
-	BEGIN TRY
-		BEGIN TRANSACTION
-		insert into dbo.PEPITO14 values(@param1,@param1,@param1)
-		insert into dbo.PEPITO5 values(@param1,@param1,@param1)
-		COMMIT
-	END TRY
-
-	BEGIN CATCH --el catch captura antes que el transaction el error, por ende si no hago el rollback en el catch quedara sin hacerse
-		PRINT 'ERROR'
-		ROLLBACK
-	END CATCH
-END
-
-
-*/
-
-
+--script de creacion de objetos de base de datos
 
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
 	id_tipo_documento TINYINT PRIMARY KEY,
@@ -79,38 +25,38 @@ CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[DATOS_PERSONA](
+CREATE TABLE [DATA_PRAXIS].[PERSONA]( --OK
 	[id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
-	[id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPOS_DOCUMENTOS](id_tipo_documento),
-	[numero_documento] [NUMERIC](18,0) NOT NULL,
-	[nombre] [varchar](255)  not null,
-	[apellido] [varchar](255) not null,
-	[telefono] [numeric](18,0) not null,
-	[mail] [varchar](255) not null,
-	[fecha_nacimiento] [DATETIME] not null,
+	[id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_DOCUMENTO](id_tipo_documento),
+	[numero_documento] [NUMERIC](18,0) NOT NULL, --paciente_dni o medico_dni
+	[nombre] [varchar](255)  not null,	     --paciente_nombre o medico_nombre
+	[apellido] [varchar](255) not null,          --paciente_apellido o medico_apellido
+	[telefono] [numeric](18,0) not null,         --paciente_telefono o medico_telefono
+	[mail] [varchar](255) not null,              --paciente_mail o medico_mail
+	[fecha_nacimiento] [DATETIME] not null,      --paciente_fecha_nac o medico_fecha_nac
 	[id_sexo][TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[SEXO] (id_sexo),
 	[cantidad_familiares_a_cargo][int] not null DEFAULT 0,
 	[id_estado_civil] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_CIVIL](id_estado_civil)
 )
 
-CREATE TABLE [DATA_PRAXIS].[AFILIADOS] (
+CREATE TABLE [DATA_PRAXIS].[AFILIADO] ( --OK
         [id_afiliado] [BIGINT] PRIMARY KEY,
-        [id_plan_medico] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLANES_MEDICOS] (id_plan_medico),
+        [id_plan_medico] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLANE_MEDICO] (id_plan_medico), --plan_med_codigo
         [numero_bonos_consulta] [int]  DEFAULT 0,
-        [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[DATOS_PERSONA] (id_persona),
+        [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
         [fecha_baja] [datetime] DEFAULT NULL
 )
 
-CREATE TABLE DATA_PRAXIS.PROFESIONALES (
+CREATE TABLE DATA_PRAXIS.PROFESIONAL ( --OK
 	id_profesional BIGINT IDENTITY (1,1) PRIMARY KEY,
 	[id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[DATOS_PERSONA] (id_persona),
 	matricula numeric(18,0) DEFAULT NULL,
 	fecha_de_baja DATETIME DEFAULT NULL
 )
 
-CREATE TABLE DATA_PRAXIS.RANGOS_HORARIOS ( --OK
-	id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-	rango_horario VARCHAR(255) NOT NULL
+CREATE TABLE DATA_PRAXIS.HORARIO_TURNO ( --OK
+	id_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+	horario [time] NOT NULL
 )
 
 CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
