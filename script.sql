@@ -54,27 +54,27 @@ END
 
 
 
-CREATE TABLE DATA_PRAXIS.Tipos_documentos ( --OK
+CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
 	id_tipo_documento TINYINT PRIMARY KEY,
-	tipo_documento VARCHAR(255) NOT NULL
+	descripcion_tipo_documento VARCHAR(20) NOT NULL
 )
 
-CREATE TABLE  DATA_PRAXIS.Sexo ( --OK
+CREATE TABLE  DATA_PRAXIS.SEXO ( --OK
 	id_sexo TINYINT PRIMARY KEY,
-	descripcion_sexo VARCHAR(255) NOT NULL
+	descripcion_sexo VARCHAR(20) NOT NULL
 )
 
-CREATE TABLE  DATA_PRAXIS.Estado_Civil (
+CREATE TABLE  DATA_PRAXIS.ESTADO_CIVIL ( --OK
 	id_estado_civil TINYINT PRIMARY KEY,
 	descripcion_estado_civil VARCHAR(255) NOT NULL
 )
 
-CREATE TABLE DATA_PRAXIS.PLANES_MEDICOS ( --OK
-	id_plan_medico numeric(18,0) PRIMARY KEY, 
-	desc_plan_medico VARCHAR(255) NULL,
-	precio_consulta numeric(18,0), 
-	fecha_asiento_precio_bono_consulta DATETIME,
-	precio_farmacia numeric(18,0), 
+CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
+	id_plan_medico numeric(18,0) PRIMARY KEY,      --plan_med_codigo
+	desc_plan_medico VARCHAR(255) NULL,            --plan_med_descripcion
+	precio_bono_consulta numeric(18,0),            --plan_med_precio_bono_consulta
+	fecha_asiento_precio_bono_consulta DATETIME,   
+	precio_bono_farmacia numeric(18,0),            --plan_med_precio_bono_farmacia
 	fecha_asiento_precio_bono_farmacia DATETIME
 )
 
