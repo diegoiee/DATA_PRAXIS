@@ -72,6 +72,15 @@ FROM maestra
 where varchar_medicamento is not null
 
 
+--PLAN MEDICO
+-------------
+
+INSERT INTO PLAN_MEDICO
+
+SELECT distinct plan_med_codigo, plan_med_descr, plan_med_precio_consulta, null , plan_med_precio_farmacia, null 
+FROM maestra
+where plan_med_codigo is not null
+
 --AGENDA
 ------
 --falta...
