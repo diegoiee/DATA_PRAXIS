@@ -108,66 +108,50 @@ matricula numeric(18,0) DEFAULT NULL,
 fecha_de_baja DATETIME DEFAULT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.RANGOS_HORARIOS ( --OK
+id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+rango_horario VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
+id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+estado_turno BIT NOT NULL
+)
+
 
 CREATE TABLE [DATA_PRAXIS].[USUARIOS](
-    [id_usuario] [varchar](20) NOT NULL,
-    [password] [varchar](20) NOT NULL
+--falta
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[ROLES](
-    [id_rol] [varchar](20) NOT NULL,
-    [nombre_rol] [varchar](40) NOT NULL,
-    [estado] [varchar](30) NOT NULL
+--falta
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[FUNCIONES](
-    [id_funcion] [varchar](20) NOT NULL,
-    [descripcion] [varchar](40) NOT NULL
+--falta
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[USUARIOS_ROLES](
-    [id_usuario] [varchar](20) NOT NULL,
-    [id_rol] [varchar](40) NOT NULL,
+--falta
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[ROLES_FUNCIONES](
-    [id_rol] [varchar](20) NOT NULL,
-    [id_funcion] [varchar](40) NOT NULL
+--falta
 )
 
 
 
 CREATE TABLE [DATA_PRAXIS].[HISTORIAL_CAMBIOS_PLANES](
-    [fecha_modificacion] [varchar](20) NOT NULL,
-    [id_usuario] [varchar](20) NOT NULL,
-    [id_plan_viejo] [varchar](20) NOT NULL,
-    [id_plan_nuevo] [varchar](20) NOT NULL,
-    [motivo_del_cambio] [varchar](20) NOT NULL,
-)
-
-
-CREATE TABLE [DATA_PRAXIS].[PROFESIONALES](
-    [nombre] [varchar](20) NOT NULL,
-    [apellido] [varchar](20) NOT NULL,
-    [tipo_documento] [varchar](20) NOT NULL,
-    [numero_documento] [varchar](20) NOT NULL,
-    [direccion_completa] [varchar](20) NOT NULL,
-    [telefono] [varchar](20) NOT NULL,
-    [mail] [varchar](20) NOT NULL,
-    [fecha_nacimiento] [varchar](20) NOT NULL,
-    [sexo] [varchar](20) NOT NULL,
-    [matricula] [varchar](20) NOT NULL,
-    [estado_profesional] [varchar](20) NOT NULL
+--falta
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[PROFESIONALES_ESPECIALIDAD](
-    [id_profesional] [varchar](20) NOT NULL,
-    [id_especialidad] [varchar](20) NOT NULL
+--falta
 )
 
 
@@ -184,58 +168,19 @@ CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[PLANES_MEDICOS](
-    [id_plan] [varchar](20) NOT NULL
-    [descripcion_plan] [varchar](20) NOT NULL
-    [precio_bono_consulta] [varchar](20) NOT NULL
-    [fecha_asiento_precio_consulta] [varchar](20) NOT NULL    
-    [precio_bono_farmacia] [varchar](20) NOT NULL
-    [fecha_asiento_precio_farmacia] [varchar](20) NOT NULL    
-)
-
 
 CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
-    [id_plan] [varchar](20) NOT NULL
-    [fecha_compra] [varchar](20) NOT NULL
-    [fecha_vencimiento] [varchar](20) NOT NULL
-    [precio_compra] [varchar](20) NOT NULL    
-    [id_afiliado] [varchar](20) NOT NULL
-    [numero_bono_consulta] [varchar](20) NOT NULL    
+--falta 
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[BONO_FARMACIA](
-    [id_plan] [varchar](20) NOT NULL
-    [fecha_compra] [varchar](20) NOT NULL
-    [descripcion_medicamento] [varchar](20) NOT NULL
-    [fecha_vencimiento] [varchar](20) NOT NULL    
-    [precio_de_compra] [varchar](20) NOT NULL
+--falta
 )
-
-CREATE TABLE DATA_PRAXIS.RANGOS_HORARIOS ( --OK
-id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-rango_horario VARCHAR(255) NOT NULL
-)
-
-CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
-id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-estado_turno BIT NOT NULL
-)
-
 
 
 CREATE TABLE [DATA_PRAXIS].[CONSULTA](
-    [id_consulta] [varchar](20) NOT NULL
-    [id_turno] [varchar](20) NOT NULL
-    [id_bono_consulta] [varchar](20) NOT NULL
-    [horario_llegada] [varchar](20) NOT NULL    
-    [sintomas] [varchar](20) NOT NULL
-    [diagnostico] [varchar](20) NOT NULL
-)
-
-CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD]( --OK
-    [id_tipo_especialidad] NUMERIC(18,0) IDENTITY (1,1) PRIMARY KEY,
-    [descripcion_tipo_especialidad] [varchar](255) NOT NULL
+--falta
 )
 
 
@@ -266,10 +211,11 @@ falta completar...
 
 )
 
-
+--//////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////////////////////////////////////////////////////////////
---/////////////////////////////////  MIGRACION ///////////////////////////////////////
+--/////////////////////////////      MIGRACION     ///////////////////////////////////
 --///////////////////////////////////////////////////////////////////////////////////
+--//////////////////////////////////////////////////////////////////////////////////
 /*
 En general el problema es con repetir varias veces la consulta de la tabla maestra.
 Estaria bueno poder en una misma consulta migrar varias tablas, 
