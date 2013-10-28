@@ -94,7 +94,7 @@ CREATE TABLE [DATA_PRAXIS].[DATOS_PERSONA](
 )
 
 CREATE TABLE [DATA_PRAXIS].[AFILIADOS] (
-        [numero_afiliado] [BIGINT] PRIMARY KEY,
+        [id_afiliado] [BIGINT] PRIMARY KEY,
         [id_plan_medico] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLANES_MEDICOS] (id_plan_medico),
         [numero_bonos_consulta] [int]  DEFAULT 0,
         [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[DATOS_PERSONA] (id_persona),
