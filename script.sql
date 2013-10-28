@@ -172,13 +172,13 @@ CREATE TABLE [DATA_PRAXIS].[PROFESIONALES_ESPECIALIDAD](
 
 
 CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD]( --OK
-    [id_tipo_especialidad] NUMERIC(18,0) IDENTITY (1,1) PRIMARY KEY,
+    [id_tipo_especialidad] NUMERIC(18,0) PRIMARY KEY,
     [descripcion_tipo_especialidad] [varchar](255) NOT NULL
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
-    [id_especialidad] NUMERIC(18,0) IDENTITY (1,1) PRIMARY KEY,
+    [id_especialidad] NUMERIC(18,0) PRIMARY KEY,
     [id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
     [descripcion_especialidad] [varchar](255) NOT NULL
 )
