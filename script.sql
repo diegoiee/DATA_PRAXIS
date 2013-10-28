@@ -69,6 +69,16 @@ id_estado_civil TINYINT PRIMARY KEY,
 descripcion_estado_civil VARCHAR(255) NOT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.PLANES_MEDICO ( --OK
+id_plan_medico numeric(18,0) PRIMARY KEY, 
+desc_plan_medico VARCHAR(255) NULL,
+precio_consulta numeric(18,0), 
+fecha_asiento_precio_bono_consulta DATETIME,
+precio_farmacia numeric(18,0), 
+fecha_asiento_precio_bono_farmacia DATETIME
+)
+
+
 CREATE TABLE [DATA_PRAXIS].[DATOS_PERSONA](
         [id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
         [id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPOS_DOCUMENTOS](id_tipo_documento),
