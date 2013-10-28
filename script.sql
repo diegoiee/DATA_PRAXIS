@@ -64,29 +64,49 @@ CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
 	estado_turno BIT NOT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.ESTADO_ROL ( --OK
+	id_estado_rol TINYINT IDENTITY (1,1) PRIMARY KEY,
+	descripcion_estado_rol VARCHAR(255) NOT NULL
+)
 
-CREATE TABLE [DATA_PRAXIS].[USUARIOS](
---falta
+CREATE TABLE DATA_PRAXIS.ESTADO_USUARIO ( --OK
+	id_estado_usuario TINYINT IDENTITY (1,1) PRIMARY KEY,
+	descripcion_estado_usuario VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
+        [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [id_persona] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
+        [clave_usuario] [VARCHAR](255) NOT NULL,
+        [intentos_ingreso] [int] NOT NULL DEFAULT 0,
+        [id_estado_usuario] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario),
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[ROLES](
---falta
+CREATE TABLE [DATA_PRAXIS].[ROL] (--OK
+        [id_rol] [INT] PRIMARY KEY IDENTITY(1,1),
+        [nombre_rol] [VARCHAR](255) NOT NULL,
+        [estado_rol] [int] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_ROL] (id_estado_rol),
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[FUNCIONES](
---falta
+CREATE TABLE [DATA_PRAXIS].[FUNCIONALIDAD](--OK
+        [id_funcionalidad] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [descripcion_funcionalidad] [varchar](255) not null
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[USUARIOS_ROLES](
---falta
+
+
+CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
+        [id_rol] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
+        [id_funcionalidad] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[FUNCIONALIDAD](id_funcionalidad)
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[ROLES_FUNCIONES](
---falta
+CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
+        [id_usuario] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [id_rol] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
 )
 
 
