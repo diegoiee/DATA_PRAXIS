@@ -212,6 +212,17 @@ CREATE TABLE [DATA_PRAXIS].[BONO_FARMACIA](
     [precio_de_compra] [varchar](20) NOT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.RANGOS_HORARIOS ( --OK
+id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+rango_horario VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
+id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+estado_turno BIT NOT NULL
+)
+
+
 
 CREATE TABLE [DATA_PRAXIS].[CONSULTA](
     [id_consulta] [varchar](20) NOT NULL
