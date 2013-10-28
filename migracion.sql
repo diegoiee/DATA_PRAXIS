@@ -33,6 +33,25 @@ FROM maestra a, datos_persona b
 WHERE a.dni = b.dni
 
 
+--TIPO ESPECIALIDAD
+--------------
+
+INSERT INTO ESPECIALIDAD
+
+SELECT DISTINCT ESPECIALIDAD_TIPO_CODIGO, ESPECIALIDAD_TIPO_DESCRIPCION
+FROM MAESTRA
+WHERE ESPECIALIDAD_TIPO_CODIGO IS NOT NULL
+
+
+--ESPECIALIDAD
+--------------
+
+INSERT INTO ESPECIALIDAD
+
+SELECT DISTINCT ESPECIALIDAD_CODIGO, ESPECIALIDAD_DESCRIPCION, ESPECIALIDAD_TIPO_CODIGO
+FROM MAESTRA
+WHERE ESPECIALIDAD_CODIGO IS NOT NULL
+
 
 --PROFESIONAL (joineo los datos personales contra la tabla maestra)
 -------------
@@ -42,24 +61,6 @@ INSERT INTO AFILIADOS
 SELECT a.id_plan_medico, b.id_persona, NULL(matricula), NULL(fecha_baja)
 FROM maestra a, datos_persona b
 WHERE a.dni = b.dni
-
-
-
---TIPO_ESPECIALIDAD
------------------
-INSERT INTO TIPO_ESPECIALIDADES
-
-SELECT distinct id_tipo_especialidad, descripcion_tipo_especialidad
-FROM maestra
-
-
---ESPECIALIDAD
---------------
-
-INSERT INTO ESPECIALIDADES
-
-SELECT distinct id_especialidad, id_tipo_especialidad, descripcion_especialidad
-FROM maestra
 
 
 --MEDICAMENTO
@@ -81,9 +82,27 @@ SELECT distinct plan_med_codigo, plan_med_descr, plan_med_precio_consulta, null 
 FROM maestra
 where plan_med_codigo is not null
 
---AGENDA
-------
---falta...
+
+
+
+
+
+--AGENDA y CONSULTA
+-------------------
+
+INSERT INTO AGENDA
+
+SELECT turno_fecha, 
+funcion_obtener_id_horario(turno_horario), 
+funcion_obtener_id_profesional(medico_dni), 
+funcion_inserta_consulta_y_obtener_id_consulta(consulta_sintomas,consulta_enfermedades,bono_consulta_numero), 
+turno_numero,
+funcion_obtener_id_afiliado(paciente_dni),
+especialidad_codigo,
+funcion_obtener_id_estado_turno(libre)
+
+FROM maestra
+where turno_fecha is not null
 
 
 --CONSULTA
