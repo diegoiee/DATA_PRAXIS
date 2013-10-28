@@ -2,19 +2,19 @@
 --Ejemplo de como crear una tabla con primary key simple o compuesta
 
 CREATE TABLE PEPITO1(
-CAMPO1 varchar(30) not null,
-CAMPO2 varchar(20) not null,
-CAMPO3 varchar(20) not null,
-CONSTRAINT nombreConstraint PRIMARY KEY(campo1)
+	CAMPO1 varchar(30) not null,
+	CAMPO2 varchar(20) not null,
+	CAMPO3 varchar(20) not null,
+	CONSTRAINT nombreConstraint PRIMARY KEY(campo1)
 )
 
 --Ejemplo de como crear una FOREIGN KEY que hace referencia a la primary key de PEPITO1
 
 CREATE TABLE PEPITO2(
-CAMPO1 varchar(30) not null,
-CAMPO2 varchar(20) not null,
-CAMPO3 varchar(30) not null, 
-CONSTRAINT nombreConstraint2 FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
+	CAMPO1 varchar(30) not null,
+	CAMPO2 varchar(20) not null,
+	CAMPO3 varchar(30) not null, 
+	CONSTRAINT nombreConstraint2 FOREIGN KEY(CAMPO3) REFERENCES PEPITO1(CAMPO1)
 )
 
 */
@@ -55,42 +55,42 @@ END
 
 
 CREATE TABLE DATA_PRAXIS.Tipos_documentos ( --OK
-id_tipo_documento TINYINT PRIMARY KEY,
-tipo_documento VARCHAR(255) NOT NULL
+	id_tipo_documento TINYINT PRIMARY KEY,
+	tipo_documento VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE  DATA_PRAXIS.Sexo ( --OK
-id_sexo TINYINT PRIMARY KEY,
-descripcion_sexo VARCHAR(255) NOT NULL
+	id_sexo TINYINT PRIMARY KEY,
+	descripcion_sexo VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE  DATA_PRAXIS.Estado_Civil (
-id_estado_civil TINYINT PRIMARY KEY,
-descripcion_estado_civil VARCHAR(255) NOT NULL
+	id_estado_civil TINYINT PRIMARY KEY,
+	descripcion_estado_civil VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE DATA_PRAXIS.PLANES_MEDICOS ( --OK
-id_plan_medico numeric(18,0) PRIMARY KEY, 
-desc_plan_medico VARCHAR(255) NULL,
-precio_consulta numeric(18,0), 
-fecha_asiento_precio_bono_consulta DATETIME,
-precio_farmacia numeric(18,0), 
-fecha_asiento_precio_bono_farmacia DATETIME
+	id_plan_medico numeric(18,0) PRIMARY KEY, 
+	desc_plan_medico VARCHAR(255) NULL,
+	precio_consulta numeric(18,0), 
+	fecha_asiento_precio_bono_consulta DATETIME,
+	precio_farmacia numeric(18,0), 
+	fecha_asiento_precio_bono_farmacia DATETIME
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[DATOS_PERSONA](
-        [id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
-        [id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPOS_DOCUMENTOS](id_tipo_documento),
-        [numero_documento] [NUMERIC](18,0) NOT NULL,
-        [nombre] [varchar](255)  not null,
-        [apellido] [varchar](255) not null,
-        [telefono] [numeric](18,0) not null,
-        [mail] [varchar](255) not null,
-        [fecha_nacimiento] [DATETIME] not null,
-        [id_sexo][TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[SEXO] (id_sexo),
-        [cantidad_familiares_a_cargo][int] not null DEFAULT 0,
-        [id_estado_civil] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_CIVIL](id_estado_civil)
+	[id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+	[id_tipo_documento] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPOS_DOCUMENTOS](id_tipo_documento),
+	[numero_documento] [NUMERIC](18,0) NOT NULL,
+	[nombre] [varchar](255)  not null,
+	[apellido] [varchar](255) not null,
+	[telefono] [numeric](18,0) not null,
+	[mail] [varchar](255) not null,
+	[fecha_nacimiento] [DATETIME] not null,
+	[id_sexo][TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[SEXO] (id_sexo),
+	[cantidad_familiares_a_cargo][int] not null DEFAULT 0,
+	[id_estado_civil] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_CIVIL](id_estado_civil)
 )
 
 CREATE TABLE [DATA_PRAXIS].[AFILIADOS] (
@@ -102,20 +102,20 @@ CREATE TABLE [DATA_PRAXIS].[AFILIADOS] (
 )
 
 CREATE TABLE DATA_PRAXIS.PROFESIONALES (
-id_profesional BIGINT IDENTITY (1,1) PRIMARY KEY,
-[id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[DATOS_PERSONA] (id_persona),
-matricula numeric(18,0) DEFAULT NULL,
-fecha_de_baja DATETIME DEFAULT NULL
+	id_profesional BIGINT IDENTITY (1,1) PRIMARY KEY,
+	[id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[DATOS_PERSONA] (id_persona),
+	matricula numeric(18,0) DEFAULT NULL,
+	fecha_de_baja DATETIME DEFAULT NULL
 )
 
 CREATE TABLE DATA_PRAXIS.RANGOS_HORARIOS ( --OK
-id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-rango_horario VARCHAR(255) NOT NULL
+	id_rango_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+	rango_horario VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
-id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-estado_turno BIT NOT NULL
+	id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
+	estado_turno BIT NOT NULL
 )
 
 
@@ -156,15 +156,15 @@ CREATE TABLE [DATA_PRAXIS].[PROFESIONALES_ESPECIALIDAD](
 
 
 CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD]( --OK
-    [id_tipo_especialidad] NUMERIC(18,0) PRIMARY KEY,
-    [descripcion_tipo_especialidad] [varchar](255) NOT NULL
+	[id_tipo_especialidad] NUMERIC(18,0) PRIMARY KEY,
+	[descripcion_tipo_especialidad] [varchar](255) NOT NULL
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
-    [id_especialidad] NUMERIC(18,0) PRIMARY KEY,
-    [id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
-    [descripcion_especialidad] [varchar](255) NOT NULL
+	[id_especialidad] NUMERIC(18,0) PRIMARY KEY,
+	[id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
+	[descripcion_especialidad] [varchar](255) NOT NULL
 )
 
 
