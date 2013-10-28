@@ -64,6 +64,11 @@ id_sexo TINYINT PRIMARY KEY,
 descripcion_sexo VARCHAR(255) NOT NULL
 )
 
+CREATE TABLE  DATA_PRAXIS.Estado_Civil (
+id_estado_civil TINYINT PRIMARY KEY,
+descripcion_estado_civil VARCHAR(255) NOT NULL
+)
+
 CREATE TABLE [DATA_PRAXIS].[USUARIOS](
     [id_usuario] [varchar](20) NOT NULL,
     [password] [varchar](20) NOT NULL
