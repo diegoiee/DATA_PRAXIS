@@ -270,7 +270,11 @@ falta completar...
 --/////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////////  MIGRACION ///////////////////////////////////////
 --///////////////////////////////////////////////////////////////////////////////////
-
+/*
+En general el problema es con repetir varias veces la consulta de la tabla maestra.
+Estaria bueno poder en una misma consulta migrar varias tablas, 
+recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
+*/
 
 --DATOS_PERSONA
 -------------
@@ -345,12 +349,16 @@ where varchar_medicamento is not null
 --falta...
 
 
-
 --BONOS_COMPRA
 ------------
 --falta...
 
 
 --BONOS_FARMACIA
+--------------
+--falta...
+
+
+--BONOS_CONSULTA
 --------------
 --falta...
