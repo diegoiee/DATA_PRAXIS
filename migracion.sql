@@ -11,15 +11,24 @@ recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila
 
 --PERSONA
 -------------
-INSERT INTO datos_persona
+INSERT INTO PERSONA
 
-SELECT datos_profesionales_persona
+SELECT DISTINCT
+'DNI', --tipodoc
+ISNULL(paciente_dni,medico_dni),
+ISNULL(paciente_nombre,medico_nombre),
+ISNULL(paciente_apellido,medico_apellido),
+ISNULL(paciente_telefono,medico_telefono),
+ISNULL(paciente_direccion,medico_direccion),
+ISNULL(paciente_mail,medico_mail),
+ISNULL(paciente_fecha_nac,medico_fecha_nac),
+NULL,--id_sexo
+0,--cant familiares a cargo
+NULL--id_estado_civil
+
 FROM maestra
 
-UNION
-
-SELECT datos_pacientes_persona
-FROM profesionales
+where (paciente_dni is not null) or (medico_dni is not null)
 
 
 
@@ -87,7 +96,7 @@ where plan_med_codigo is not null
 
 
 
---AGENDA y CONSULTA
+--AGENDA y CONSULTA (no hay turnos sin consulta en la tabla maestra)
 -------------------
 
 INSERT INTO AGENDA
@@ -95,7 +104,7 @@ INSERT INTO AGENDA
 SELECT turno_fecha, 
 funcion_obtener_id_horario(turno_horario), 
 funcion_obtener_id_profesional(medico_dni), 
-funcion_inserta_consulta_y_obtener_id_consulta(consulta_sintomas,consulta_enfermedades,bono_consulta_numero), 
+funcion_inserta_consulta_y_obtener_id_consulta(consulta_sintomas,consulta_enfermedades,bono_consulta_numero), --MIGRACION CONSULTA 
 turno_numero,
 funcion_obtener_id_afiliado(paciente_dni),
 especialidad_codigo,
@@ -105,9 +114,6 @@ FROM maestra
 where turno_fecha is not null
 
 
---CONSULTA
---------
---falta...
 
 
 --BONOS_COMPRA
