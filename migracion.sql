@@ -4,7 +4,7 @@
 --///////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////
 /*
-En general el problema es con repetir varias veces la consulta de la tabla maestra.
+En general el problema es repetir varias veces la consulta de la tabla maestra.
 Estaria bueno poder en una misma consulta migrar varias tablas, 
 recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
 */
