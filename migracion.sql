@@ -9,26 +9,25 @@ Estaria bueno poder en una misma consulta migrar varias tablas,
 recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
 */
 
---PERSONA
--------------
+--PERSONA --OK
+------------- 
 INSERT INTO PERSONA
 
 SELECT DISTINCT
 'DNI', --tipodoc
-ISNULL(paciente_dni,medico_dni),
-ISNULL(paciente_nombre,medico_nombre),
-ISNULL(paciente_apellido,medico_apellido),
-ISNULL(paciente_telefono,medico_telefono),
-ISNULL(paciente_direccion,medico_direccion),
-ISNULL(paciente_mail,medico_mail),
-ISNULL(paciente_fecha_nac,medico_fecha_nac),
+ISNULL(medico_dni,paciente_dni),
+ISNULL(medico_nombre,paciente_nombre),
+ISNULL(medico_apellido,paciente_apellido),
+ISNULL(medico_telefono,paciente_telefono),
+ISNULL(medico_direccion,paciente_direccion),
+ISNULL(medico_mail,paciente_mail),
+ISNULL(medico_fecha_nac,paciente_fecha_nac),
 NULL,--id_sexo
 0,--cant familiares a cargo
 NULL--id_estado_civil
 
-FROM maestra
+FROM gd_esquema.Maestra
 
-where (paciente_dni is not null) or (medico_dni is not null)
 
 
 
@@ -37,8 +36,8 @@ where (paciente_dni is not null) or (medico_dni is not null)
 
 INSERT INTO AFILIADOS
 
-SELECT funcion_obtener_id_afiliado,  a.id_plan_medico, 0 (nro_bono_consulta arranca en 0), b.id_persona, NULL
-FROM maestra a, datos_persona b
+SELECT seq_id_afiliado.nextval,  a.id_plan_medico, 0 /*(nro_bono_consulta arranca en 0)*/, b.id_persona, NULL
+FROM maestra a, persona b
 WHERE a.dni = b.dni
 
 
