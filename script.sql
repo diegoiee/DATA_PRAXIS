@@ -177,7 +177,7 @@ CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
 
 
 CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
-        [fecha] [date] not null,
+        [fecha_turno] [date] not null,
         [id_horario_turno] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
         [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
         [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
@@ -191,14 +191,14 @@ CREATE TABLE [DATA_PRAXIS].[AGENDA](
 
 CREATE TABLE [DATA_PRAXIS].[REGISTRO_CANCELACIONES](
 
-falta completar...
+--falta completar...
 
 )
 
 
 CREATE TABLE [DATA_PRAXIS].[RECETAS_MEDICAS](
 
-falta completar...
+--falta completar...
 
 )
 
