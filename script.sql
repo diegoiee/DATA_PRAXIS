@@ -1,5 +1,7 @@
 --script de creacion de objetos de base de datos
 
+EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
+
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
 	id_tipo_documento TINYINT PRIMARY KEY,
 	descripcion_tipo_documento VARCHAR(20) NOT NULL
