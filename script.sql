@@ -34,6 +34,7 @@ CREATE TABLE [DATA_PRAXIS].[PERSONA]( --OK
 	[numero_documento] [NUMERIC](18,0) NOT NULL, --paciente_dni o medico_dni
 	[nombre] [varchar](255)  not null,	     --paciente_nombre o medico_nombre
 	[apellido] [varchar](255) not null,          --paciente_apellido o medico_apellido
+	[direccion] [varchar](255) not null,         --paciente_direccion o medico_direccion
 	[telefono] [numeric](18,0) not null,         --paciente_telefono o medico_telefono
 	[mail] [varchar](255) not null,              --paciente_mail o medico_mail
 	[fecha_nacimiento] [DATETIME] not null,      --paciente_fecha_nac o medico_fecha_nac
