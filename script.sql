@@ -42,7 +42,7 @@ CREATE TABLE [DATA_PRAXIS].[PERSONA]( --OK
 CREATE TABLE [DATA_PRAXIS].[AFILIADO] ( --OK
         [id_afiliado] [BIGINT] PRIMARY KEY,
         [id_plan_medico] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLANE_MEDICO] (id_plan_medico), --plan_med_codigo
-        [numero_bonos_consulta] [int]  DEFAULT 0,
+        [numero_consulta] [int]  DEFAULT 0,
         [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
         [fecha_baja] [datetime] DEFAULT NULL
 )
@@ -111,13 +111,19 @@ CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
 
 
 
-CREATE TABLE [DATA_PRAXIS].[HISTORIAL_CAMBIOS_PLANES](
---falta
+CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
+	[id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [fecha_modificacion] [datetime] not null,
+        [id_plan_viejo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [id_plan_nuevo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [motivo_del_cambio] [varchar](255) null
+        constraint pk_historial_cambio_planes_t PRIMARY KEY (id_usuario, fecha_modificacion)
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[PROFESIONALES_ESPECIALIDAD](
---falta
+CREATE TABLE [DATA_PRAXIS].[PROFESIONAL_ESPECIALIDAD] (--OK
+        [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+        [id_especialidad ][numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad)
 )
 
 
@@ -127,7 +133,7 @@ CREATE TABLE [DATA_PRAXIS].[TIPO_ESPECIALIDAD]( --OK
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
+CREATE TABLE [DATA_PRAXIS].[ESPECIALIDAD]( --OK
 	[id_especialidad] NUMERIC(18,0) PRIMARY KEY,
 	[id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
 	[descripcion_especialidad] [varchar](255) NOT NULL
@@ -135,32 +141,50 @@ CREATE TABLE [DATA_PRAXIS].[ESPECIALIDADES]( --OK
 
 
 
-CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
---falta 
+CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA]( --revisar si hace falta el campo id receta
+        id_bono_consulta numeric(18,0) primary key,
+        id_receta bigint null FOREIGN KEY References DATA_PRAXIS.RECETA (id_receta), --
+     	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
+        precio_compra numeric(18,2) null,
+        numero_consulta int
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[BONO_FARMACIA](
---falta
+CREATE TABLE [DATA_PRAXIS].[BONO_FARMACIA]( --OK
+	id_bono_farmacia numeric(18,0) primary key,
+	id_receta bigint FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
+	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra)
+	precio_compra numeric(18,2) null
+)
+
+CREATE TABLE [DATA_PRAXIS].[BONO_COMPRA]( --OK
+	id_bono_compra bigint identity(1,1) primary key,
+	id_afiliado bigint FOREIGN KEY references DATA_PRAXIS.AFILIADO (id_afiliado),
+	id_plan_medico numeric(18,0) FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
+	id_consulta bigint foreign key references DATA_PRAXIS.CONSULTA(id_consulta),
+	precio_total numeric(18,2)
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[CONSULTA](
---falta
+CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
+        id_consulta BIGINT identity(1,1) PRIMARY KEY,
+        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
+        horario_llegada datetime null,
+        sintomas varchar(255) null,
+        diagnostico varchar(255) null
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[TURNOS_DISPONIBLES](
 
-falta completar...
-
-)
-
-
-CREATE TABLE [DATA_PRAXIS].[TURNOS_RESERVADOS](
-
-falta completar...
-
+CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
+        [fecha] [datetime] not null,
+        [id_horario_turno] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
+        [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+        [id_consulta] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
+        [id_turno] [numeric](18,0) null,
+        [id_paciente] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (numero_afiliado),
+        [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
+        [id_estado_turno] [int] null
 )
 
 
