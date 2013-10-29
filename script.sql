@@ -189,17 +189,6 @@ CREATE TABLE [DATA_PRAXIS].[AGENDA](
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[REGISTRO_CANCELACIONES](
 
---falta completar...
-
-)
-
-
-CREATE TABLE [DATA_PRAXIS].[RECETAS_MEDICAS](
-
---falta completar...
-
-)
 
 
