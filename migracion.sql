@@ -9,12 +9,28 @@ Estaria bueno poder en una misma consulta migrar varias tablas,
 recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
 */
 
+
+--TIPO_DNI --OK
+------------- 
+INSERT INTO DATA_PRAXIS.TIPO_DOCUMENTO VALUES(1,'DNI')
+
 --PERSONA --OK
 ------------- 
-INSERT INTO PERSONA
+INSERT INTO DATA_PRAXIS.PERSONA(
+id_tipo_documento,
+numero_documento,
+nombre,
+apellido,
+telefono,
+direccion,
+mail,
+fecha_nacimiento,
+id_sexo,
+cantidad_familiares_a_cargo,
+id_estado_civil)
 
 SELECT DISTINCT
-'DNI', --tipodoc
+1, --tipodoc 
 ISNULL(medico_dni,paciente_dni),
 ISNULL(medico_nombre,paciente_nombre),
 ISNULL(medico_apellido,paciente_apellido),
