@@ -52,7 +52,7 @@ FROM gd_esquema.Maestra
 
 INSERT INTO DATA_PRAXIS.AFILIADOS
 
-SELECT seq_id_afiliado.nextval,  a.id_plan_medico, 0 /*(nro_bono_consulta arranca en 0)*/, b.id_persona, NULL
+SELECT plan_med_codigo, 0 /*(nro_bono_consulta arranca en 0)*/,funcion_retornar_id_persona(paciente_dni), NULL
 FROM maestra a, persona b
 WHERE a.dni = b.dni
 
