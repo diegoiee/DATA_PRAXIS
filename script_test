@@ -113,3 +113,29 @@ NULL,--id_sexo
 NULL--id_estado_civil
 
 FROM gd_esquema.Maestra
+
+
+CREATE FUNCTION Obtener_id_Persona
+(
+	-- Add the parameters for the function here
+	--<@Param1, sysname, @p1> <Data_Type_For_Param1, , int>
+	@dni numeric(18,0)
+)
+RETURNS BIGINT
+AS
+BEGIN
+	-- Declare the return variable here
+	DECLARE @id_persona_retorno numeric(18,0)
+
+	-- Add the T-SQL statements to compute the return value here
+	set @id_persona_retorno = (SELECT id_persona from DATA_PRAXIS.PERSONA WHERE numero_documento = @dni)
+
+	-- Return the result of the function
+	RETURN @id_persona_retorno 
+
+END
+GO
+
+
+--select dbo.Obtener_id_Persona(Paciente_dni) from gd_esquema.Maestra
+
