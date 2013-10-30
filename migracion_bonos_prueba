@@ -1,0 +1,5 @@
+migracion bono
+
+select *
+from gd_esquema.Maestra
+where Turno_Numero is null and Consulta_Sintomas is null
