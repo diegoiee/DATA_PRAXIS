@@ -1,4 +1,5 @@
 
+
 EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
 
 
@@ -154,7 +155,7 @@ FROM gd_esquema.Maestra
 
 --AFILIADO --OK
 -------------
-INSERT INTO DATA_PRAXIS.AFILIADO(id_afiliado,id_persona,id_plan_medico,numero_consulta,fecha_baja)
+INSERT INTO DATA_PRAXIS.AFILIADO
 SELECT
 (ROW_NUMBER()OVER(order by Paciente_Dni))*100,
 DATA_PRAXIS.OBTENER_ID_PERSONA(asd.Paciente_Dni),
@@ -173,3 +174,22 @@ NULL
 
 FROM (SELECT distinct Medico_Dni FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
 
+--TIPO_ESPECIALIDAD --OK
+-------------
+INSERT INTO DATA_PRAXIS.TIPO_ESPECIALIDAD
+SELECT distinct
+Tipo_Especialidad_Codigo,
+Tipo_Especialidad_Descripcion
+FROM gd_esquema.Maestra 
+where Tipo_Especialidad_Codigo is not null
+
+
+--ESPECIALIDAD --OK
+-------------
+INSERT INTO DATA_PRAXIS.ESPECIALIDAD
+SELECT distinct
+Especialidad_Codigo,
+Tipo_Especialidad_Codigo,
+Especialidad_Descripcion
+FROM gd_esquema.Maestra 
+where Especialidad_Codigo is not null
