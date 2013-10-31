@@ -1,4 +1,9 @@
+
+
 EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
+
+
+--EXEC('DROP SCHEMA [DATA_PRAXIS]')
 
 
 CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
@@ -41,10 +46,10 @@ CREATE TABLE [DATA_PRAXIS].[PERSONA]( --OK
 )
 
 CREATE TABLE [DATA_PRAXIS].[AFILIADO] ( --OK
-        [id_afiliado] [BIGINT] PRIMARY KEY,
+        [id_afiliado] [BIGINT],
+        [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
         [id_plan_medico] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico), --plan_med_codigo
         [numero_consulta] [int]  DEFAULT 0,
-        [id_persona] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
         [fecha_baja] [datetime] DEFAULT NULL
 )
 
@@ -67,6 +72,26 @@ CREATE TABLE [DATA_PRAXIS].[ESPECIALIDAD]( --OK
 	[id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
 	[descripcion_especialidad] [varchar](255) NOT NULL
 )
+
+GO
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT
+AS
+BEGIN
+	DECLARE @id_persona_retorno numeric(18,0)
+
+	set @id_persona_retorno = (	SELECT id_persona 
+					from DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+
+
+--select dbo.Obtener_id_Persona(Paciente_dni) from gd_esquema.Maestra
 
 
 --//////////////////////////////////////////////////////////////////////////////////////
@@ -138,24 +163,4 @@ asd.Plan_Med_Codigo,
 0,
 NULL
 FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) asd
-
-
-CREATE FUNCTION OBTENER_ID_PERSONA
-(
-	@dni numeric(18,0)
-)
-RETURNS BIGINT
-AS
-BEGIN
-
-	DECLARE @id_persona_retorno numeric(18,0)
-
-	set @id_persona_retorno = (	SELECT id_persona 
-					from DATA_PRAXIS.PERSONA 
-					WHERE numero_documento = @dni)
-
-	RETURN @id_persona_retorno 
-END
-
-
 
