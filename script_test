@@ -1,5 +1,4 @@
 
-
 EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
 
 
@@ -71,6 +70,11 @@ CREATE TABLE [DATA_PRAXIS].[ESPECIALIDAD]( --OK
 	[id_especialidad] NUMERIC(18,0) PRIMARY KEY,
 	[id_tipo_especialidad] NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
 	[descripcion_especialidad] [varchar](255) NOT NULL
+)
+
+CREATE TABLE [DATA_PRAXIS].[PROFESIONAL_ESPECIALIDAD] (--OK
+        [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+        [id_especialidad ][numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad)
 )
 
 GO
@@ -193,3 +197,14 @@ Tipo_Especialidad_Codigo,
 Especialidad_Descripcion
 FROM gd_esquema.Maestra 
 where Especialidad_Codigo is not null
+
+--MEDICO_ESPECIALIDAD --OK
+-------------------------
+INSERT INTO DATA_PRAXIS.PROFESIONAL_ESPECIALIDAD
+SELECT (
+SELECT id_profesional FROM DATA_PRAXIS.PROFESIONAL 
+WHERE id_persona=(SELECT aux.id_persona FROM DATA_PRAXIS.PERSONA aux where aux.numero_documento = asd.Medico_Dni)
+), asd.Especialidad_Codigo
+
+FROM
+(SELECT DISTINCT Medico_Dni, Especialidad_Codigo FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
