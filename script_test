@@ -114,6 +114,31 @@ NULL--id_estado_civil
 
 FROM gd_esquema.Maestra
 
+--PLAN_MEDICO--
+-------------
+
+INSERT INTO DATA_PRAXIS.PLAN_MEDICO
+SELECT DISTINCT 
+plan_med_codigo,
+plan_med_descripcion,
+plan_med_precio_bono_consulta,
+NULL,
+plan_med_precio_bono_farmacia,
+NULL
+FROM gd_esquema.Maestra
+
+
+--AFILIADO --OK
+-------------
+INSERT INTO DATA_PRAXIS.AFILIADO(id_afiliado,id_persona,id_plan_medico,numero_consulta,fecha_baja)
+SELECT
+(ROW_NUMBER()OVER(order by Paciente_Dni))*100,
+DATA_PRAXIS.OBTENER_ID_PERSONA(asd.Paciente_Dni),
+asd.Plan_Med_Codigo,
+0,
+NULL
+FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) asd
+
 
 CREATE FUNCTION OBTENER_ID_PERSONA
 (
@@ -133,6 +158,4 @@ BEGIN
 END
 
 
-
---select dbo.Obtener_id_Persona(Paciente_dni) from gd_esquema.Maestra
 
