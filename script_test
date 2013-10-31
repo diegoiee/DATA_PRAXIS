@@ -1,5 +1,4 @@
 
-
 EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
 
 
@@ -163,4 +162,14 @@ asd.Plan_Med_Codigo,
 0,
 NULL
 FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) asd
+
+--PROFESIONAL --OK
+-------------
+INSERT INTO DATA_PRAXIS.PROFESIONAL
+SELECT
+DATA_PRAXIS.OBTENER_ID_PERSONA(asd.Medico_Dni),
+NULL,
+NULL
+
+FROM (SELECT distinct Medico_Dni FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
 
