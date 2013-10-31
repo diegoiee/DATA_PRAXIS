@@ -1,4 +1,3 @@
-
 EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
 
 
@@ -25,9 +24,16 @@ CREATE TABLE  DATA_PRAXIS.SEXO ( --OK
 )
 
 CREATE TABLE  DATA_PRAXIS.ESTADO_CIVIL ( --OK
-	id_estado_civil TINYINT PRIMARY KEY,
-	descripcion_estado_civil VARCHAR(255) NOT NULL
+[id_estado_civil] [TINYINT] PRIMARY KEY,
+[descripcion_estado_civil] VARCHAR(255) NOT NULL
 )
+
+CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( -- OK
+[id_estado_turno] [TINYINT] PRIMARY KEY,
+[descripcion_estado_turno] VARCHAR(255) NOT NULL
+)
+
+
 
 CREATE TABLE [DATA_PRAXIS].[PERSONA]( --OK
 	[id_persona] [BIGINT] PRIMARY KEY IDENTITY(1,1),
