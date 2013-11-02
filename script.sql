@@ -1,6 +1,14 @@
 --script de creacion de objetos de base de datos
 
-EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [dbo]')
+--//////////////////////////////////
+--////  Schema creation section  //
+--////////////////////////////////
+
+EXEC('CREATE SCHEMA [DATA_PRAXIS] AUTHORIZATION [gd]')
+
+--//////////////////////////////////
+--////  Table creation section  ///
+--////////////////////////////////
 
 
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
@@ -13,9 +21,27 @@ CREATE TABLE  DATA_PRAXIS.SEXO ( --OK
 	descripcion_sexo VARCHAR(20) NOT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.HORARIO_TURNO ( --OK
+	id_horario_turno TINYINT IDENTITY(1,1) PRIMARY KEY,
+	horario_turno VARCHAR(255) NOT NULL
+)
+
+
 CREATE TABLE  DATA_PRAXIS.ESTADO_CIVIL ( --OK
 	id_estado_civil TINYINT PRIMARY KEY,
 	descripcion_estado_civil VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
+	id_estado_turno TINYINT PRIMARY KEY,
+	estado_turno VARCHAR(20) NOT NULL    --Motivo para usar un VARCHAR en lugar de un BIT: escalabilidad.Ej: se agrega estado reserva.
+)
+
+
+CREATE TABLE DATA_PRAXIS.ROL ( --OK
+        id_rol INT PRIMARY KEY,
+        nombre_rol VARCHAR(20) NOT NULL,
+        estado_rol TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
 
 CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
@@ -58,25 +84,20 @@ CREATE TABLE DATA_PRAXIS.PROFESIONAL ( --OK
 	fecha_de_baja DATETIME DEFAULT NULL
 )
 
-CREATE TABLE DATA_PRAXIS.HORARIO_TURNO ( --OK
-	id_horario_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-	horario [time] NOT NULL
-)
-
-CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
-	id_estados_turno TINYINT IDENTITY (1,1) PRIMARY KEY,
-	estado_turno BIT NOT NULL
-)
-
 CREATE TABLE DATA_PRAXIS.ESTADO_ROL ( --OK
 	id_estado_rol TINYINT IDENTITY (1,1) PRIMARY KEY,
 	descripcion_estado_rol VARCHAR(255) NOT NULL
 )
 
+
 CREATE TABLE DATA_PRAXIS.ESTADO_USUARIO ( --OK
 	id_estado_usuario TINYINT IDENTITY (1,1) PRIMARY KEY,
 	descripcion_estado_usuario VARCHAR(255) NOT NULL
 )
+
+
+
+
 
 CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
         [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
@@ -87,11 +108,6 @@ CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
 )
 
 
-CREATE TABLE [DATA_PRAXIS].[ROL] (--OK
-        [id_rol] [INT] PRIMARY KEY IDENTITY(1,1),
-        [nombre_rol] [VARCHAR](255) NOT NULL,
-        [estado_rol] [int] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_ROL] (id_estado_rol),
-)
 
 
 CREATE TABLE [DATA_PRAXIS].[FUNCIONALIDAD](--OK
@@ -191,6 +207,38 @@ CREATE TABLE [DATA_PRAXIS].[AGENDA](
         [id_estado_turno] [int] null,
         constraint pk_agenda primary key(fecha,id_horario_turno,id_profesional)
 )
+
+
+
+--////////////////////////////////
+--////  Insertion Section   /////
+--//////////////////////////////
+
+
+INSERT INTO DATA_PRAXIS.TIPO_DOCUMENTO (id_tipo_documento, descripcion_tipo_documento)
+	VALUES(1,'D.N.I.'),(2,'PASAPORTE'),(3,'L.C'),(4,'C.I.'),(5,'L.E')
+
+
+INSERT INTO DATA_PRAXIS.SEXO (id_sexo, descripcion_sexo)
+	VALUES(1,'MUJER'),(2,'HOMBRE')
+
+
+INSERT INTO DATA_PRAXIS.HORARIO_TURNO (horario_turno)
+VALUES ('00:00 - 00:30 hs.'),('00:30 - 01:00 hs.'),('01:00 - 01:30 hs.'),('01:30 - 02:00 hs.'),('02:00 - 02:30 hs.'),('02:30 - 03:00 hs.'),('03:00 - 03:30 hs.'),('03:30 - 04:00 hs.'),('04:00 - 04:30 hs.'),('04:30 - 05:00 hs.'),('05:00 - 05:30 hs.'),('05:30 - 06:00 hs.'),('06:00 - 06:30 hs.'),('06:30 - 07:00 hs.'),('07:00 - 07:30 hs.'),('07:30 - 08:00 hs.'),('08:00 - 08:30 hs.'),('08:30 - 09:00 hs.'),('09:00 - 09:30 hs.'),('09:30 - 10:00 hs.'),('10:00 - 10:30 hs.'),('10:30 - 11:00 hs.'),('11:00 - 11:30 hs.'),('11:30 - 12:00 hs.'),('12:00 - 12:30 hs.'),('12:30 - 13:00 hs.'),('13:00 - 13:30 hs.'),('13:30 - 14:00 hs.'),('14:00 - 14:30 hs.'),('14:30 - 15:00 hs.'),('15:00 - 15:30 hs.'),('15:30 - 16:00 hs.'),('16:00 - 16:30 hs.'),('16:30 - 17:00 hs.'),('17:00 - 17:30 hs.'),('17:30 - 18:00 hs.'),('18:00 - 18:30 hs.'),('18:30 - 19:00 hs.'),('19:00 - 19:30 hs.'),('19:30 - 20:00 hs.'),('20:00 - 20:30 hs.'),('20:30 - 21:00 hs.'),('21:00 - 21:30 hs.'),('21:30 - 22:00 hs.'),('22:00 - 22:30 hs.'),('22:30 - 23:00 hs.'),('23:00 - 23:30 hs.'),('23:30 - 00:00 hs.')
+
+
+INSERT INTO DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil, descripcion_estado_civil)
+(1,'Soltero-a'),(2,'Casado-a'),(3,'Divorciado-a'),(4,'Viudo-a'),(5,'Separado-a'),(6,'Concubino-a'),(7,'Difunto-a')
+
+
+INSERT INTO DATA_PRAXIS.ESTADO_TURNO (id_estado_turno, estado_turno)
+VALUES (1,'DISPONIBLE'), (2,'OTORGADO')
+
+
+INSERT INTO DATA_PRAXIS.ROL (id_rol, nombre_rol)
+VALUES (1,'AFILIADO'),(2,'PROFESIONAL'), (3,'ADMINISTRATIVO')
+
+
 
 
 
