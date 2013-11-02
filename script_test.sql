@@ -42,7 +42,7 @@ CREATE TABLE [DATA_PRAXIS.ROL] (
 
 CREATE TABLE [DATA_PRAXIS.PERSONA] ( --OK
 	id_persona BIGINT IDENTITY(1,1) PRIMARY KEY,
-	id_tipo_documento TINYINT NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS.TIPO_DOCUMENTO] (id_tipo_documento),
+	id_tipo_documento TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS.TIPO_DOCUMENTO]  (id_tipo_documento),
 	numero_documento NUMERIC(18,0) NOT NULL, 	--paciente_dni o medico_dni
 	nombre VARCHAR(255) NOT NULL,	         	--paciente_nombre o medico_nombre
 	apellido VARCHAR(255) NOT NULL,          	--paciente_apellido o medico_apellido
@@ -50,14 +50,19 @@ CREATE TABLE [DATA_PRAXIS.PERSONA] ( --OK
 	direccion VARCHAR(255) NOT NULL,          	--paciente_direccion o medico_direccion
 	mail VARCHAR(255) NOT NULL,              	--paciente_mail o medico_mail
 	fecha_nacimiento DATETIME NOT NULL,      	--paciente_fecha_nac o medico_fecha_nac
-	id_sexo TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS].SEXO (id_sexo),
+	id_sexo TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS.SEXO] (id_sexo),
 	cantidad_familiares_a_cargo INT  NOT NULL DEFAULT 0,
 	id_estado_civil TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS.ESTADO_CIVIL] (id_estado_civil)
 )
 
-
-
-
+CREATE TABLE [DATA_PRAXIS.PLAN_MEDICO] ( --OK
+	id_plan_medico NUMERIC(18,0) PRIMARY KEY,      --plan_med_codigo
+	desc_plan_medico VARCHAR(255) NULL,            --plan_med_descripcion
+	precio_bono_consulta numeric(18,0),            --plan_med_precio_bono_consulta
+	fecha_asiento_precio_bono_consulta DATETIME,   
+	precio_bono_farmacia numeric(18,0),            --plan_med_precio_bono_farmacia
+	fecha_asiento_precio_bono_farmacia DATETIME
+)
 
 CREATE TABLE [DATA_PRAXIS.FUNCIONALIDAD] (
 	id_func [INT] IDENTITY(1,1) PRIMARY KEY,
@@ -71,14 +76,7 @@ CREATE TABLE [DATA_PRAXIS.FUNCIONALIDAD] (
 
 
 
-CREATE TABLE [DATA_PRAXIS.PLAN_MEDICO] ( --OK
-	id_plan_medico NUMERIC(18,0) PRIMARY KEY,      --plan_med_codigo
-	desc_plan_medico VARCHAR(255) NULL,            --plan_med_descripcion
-	precio_bono_consulta numeric(18,0),            --plan_med_precio_bono_consulta
-	fecha_asiento_precio_bono_consulta DATETIME,   
-	precio_bono_farmacia numeric(18,0),            --plan_med_precio_bono_farmacia
-	fecha_asiento_precio_bono_farmacia DATETIME
-)
+
 
 
 
@@ -148,7 +146,7 @@ GO
 
 --//////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////////////////////////////////////////////////////////////
---///////////////////////    Llenado, nuevas tablas    ///////////////////////////////
+--///////////////////////    Llenado, nuevas tablas    ///////////////////////////
 --///////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////
 
@@ -174,7 +172,7 @@ VALUES ('00:00 - 00:30 hs.'),('00:30 - 01:00 hs.'),('01:00 - 01:30 hs.'),('01:30
 -------------------
 
 INSERT INTO [DATA_PRAXIS.ESTADO_CIVIL] (id_estado_civil, descripcion_estado_civil)
-(1,'Soltero-a'),(2,'Casado-a'),(3,'Divorciado-a'),(4,'Viudo-a'),(5,'Separado-a'),(6,'Concubino-a'),(7,'Difunto-a')
+VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concubino/a'),(6,'Difunto/a')
 
 --Estado-Turno --OK
 -------------------
