@@ -78,8 +78,7 @@ CREATE TABLE [DATA_PRAXIS.FUNCIONALIDAD] (
 
 
 
-
-
+--
 
 
 
