@@ -12,7 +12,7 @@ CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
 (
 	@dni numeric(18,0)
 )
-RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ï¿½STO!!!!!!!!!!!
 AS
 BEGIN
 	DECLARE @id_persona_retorno numeric(18,0)
@@ -28,10 +28,10 @@ CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
 (
 	@dni numeric(18,0)
 )
-RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ï¿½STO!!!!!!!!!!!
 AS
 BEGIN
-	DECLARE @id_persona_retorno NUMERIC(18,0)
+	DECLARE @id_persona_retorno BIGINT
 	SET @id_persona_retorno = (	SELECT id_persona 
 					FROM  DATA_PRAXIS.PERSONA 
 					WHERE numero_documento = @dni)
@@ -44,14 +44,13 @@ CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_AFILIADO
 (
 	@dni numeric(18,0)
 )
-RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ï¿½STO!!!!!!!!!!!
 AS
 BEGIN
-	DECLARE @id_persona_afiliado numeric(18,0)
-	SET @id_afiliado_retorno = (	SELECT id_afiliado
-					FROM  DATA_PRAXIS.PERSONA 
-					WHERE numero_documento = @dni)
-	RETURN @id_persona_retorno 
+
+	RETURN (select id_afiliado
+	from DATA_PRAXIS.AFILIADOS
+	where id_persona=DATA_PRAXIS.OBTENER_ID_PERSONA(@dni))
 END
 GO
 
