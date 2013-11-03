@@ -1,11 +1,11 @@
+
+begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
 
 --EXEC('DROP SCHEMA DATA_PRAXIS')
 
---////////////////////////////////////////////////
---  /////    Section - Functions     ///////////////
---////////////////////////////////////////////////
+
 
 /*
 CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
@@ -24,35 +24,7 @@ END
 GO
 */
 
-CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
-(
-	@dni numeric(18,0)
-)
-RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
-AS
-BEGIN
-	DECLARE @id_persona_retorno BIGINT
-	SET @id_persona_retorno = (	SELECT id_persona 
-					FROM  DATA_PRAXIS.PERSONA 
-					WHERE numero_documento = @dni)
-	RETURN @id_persona_retorno 
-END
-GO
 
-
-CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_AFILIADO
-(
-	@dni numeric(18,0)
-)
-RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
-AS
-BEGIN
-
-	RETURN (select id_afiliado
-	from DATA_PRAXIS.AFILIADOS
-	where id_persona=DATA_PRAXIS.OBTENER_ID_PERSONA(@dni))
-END
-GO
 
 
 -- Tables creation Section
@@ -165,7 +137,41 @@ GO
 
 
 
+--////////////////////////////////////////////////
+--  /////    Section - Functions     ///////////////
+--////////////////////////////////////////////////
 
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
+AS
+BEGIN
+	DECLARE @id_persona_retorno BIGINT
+	SET @id_persona_retorno = (	SELECT id_persona 
+					FROM  DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+
+
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_AFILIADO
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
+AS
+BEGIN
+
+	RETURN (select id_afiliado
+	from DATA_PRAXIS.AFILIADO
+	where id_persona=DATA_PRAXIS.OBTENER_ID_PERSONA(@dni))
+END
+GO
+
+----
 
 
 
@@ -263,17 +269,6 @@ NULL
 FROM gd_esquema.Maestra
 
 
---ESPECIALIDAD --OK
--------------
-INSERT INTO DATA_PRAXIS.ESPECIALIDAD
-SELECT distinct
-Especialidad_Codigo,
-Tipo_Especialidad_Codigo,
-Especialidad_Descripcion
-FROM gd_esquema.Maestra 
-where Especialidad_Codigo is not null
-
-
 --TIPO_ESPECIALIDAD --OK
 -------------
 INSERT INTO DATA_PRAXIS.TIPO_ESPECIALIDAD
@@ -283,7 +278,15 @@ Tipo_Especialidad_Descripcion
 FROM gd_esquema.Maestra 
 where Tipo_Especialidad_Codigo is not null
 
-
+--ESPECIALIDAD --OK
+-------------
+INSERT INTO DATA_PRAXIS.ESPECIALIDAD
+SELECT distinct
+Especialidad_Codigo,
+Tipo_Especialidad_Codigo,
+Especialidad_Descripcion
+FROM gd_esquema.Maestra 
+where Especialidad_Codigo is not null
 
 
 
@@ -321,4 +324,10 @@ WHERE id_persona=(SELECT aux.id_persona FROM DATA_PRAXIS.PERSONA aux where aux.n
 FROM
 (SELECT DISTINCT Medico_Dni, Especialidad_Codigo FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
 
+commit tran t1;
 
+
+
+/*SELECT Compra_Bono_Fecha, DATA_PRAXIS.obtener_id_afiliado(Paciente_Dni), Plan_Med_Codigo
+from gd_esquema.Maestra
+where Paciente_Dni is not null*/
