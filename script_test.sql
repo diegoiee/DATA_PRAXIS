@@ -447,6 +447,15 @@ SELECT  DISTINCT Bono_Farmacia_Medicamento
 FROM  gd_esquema.Maestra 
 WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
+--AGENDA(solo  reserva sin concretar)
+insert into datapraxis.agenda(fecha_turno,id_horario_turno,id_profesional,id,turno,id_afiliado,id_especialidad,id_estado_turno)
+select a.Turno_Fecha, b.id_horario_turno, d.id_profesional, NULL as 'id_consulta', a.Turno_Numero, e.id_afiliado, a.Especialidad_Codigo, 2
+from (select * from gd_esquema.Maestra where Medico_Dni is not null) a
+join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
+join data_praxis.persona c on c.numero_documento=a.Paciente_Dni or c.numero_documento=a.Medico_Dni
+left join data_praxis.profesional d on c.id_persona=d.id_persona
+left join data_praxis.afiliado e on c.id_persona=e.id_persona
+
 commit tran t1;
 
 
