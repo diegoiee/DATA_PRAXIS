@@ -2,26 +2,10 @@ begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
 
---EXEC('DROP SCHEMA DATA_PRAXIS')
 
 
 
-/*
-CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
-(
-	@dni numeric(18,0)
-)
-RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
-AS
-BEGIN
-	DECLARE @id_persona_retorno numeric(18,0)
-	SET @id_persona_retorno = (	SELECT id_persona 
-					FROM  DATA_PRAXIS.PERSONA 
-					WHERE numero_documento = @dni)
-	RETURN @id_persona_retorno 
-END
-GO
-*/
+
 
 
 
