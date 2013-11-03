@@ -111,7 +111,7 @@ CREATE TABLE DATA_PRAXIS.ESPECIALIDAD( --OK
 
 
 CREATE TABLE DATA_PRAXIS.AFILIADO ( --OK
-        id_afiliado BIGINT,
+        id_afiliado BIGINT PRIMARY KEY,
         id_persona BIGINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PERSONA (id_persona),
         id_plan_medico numeric(18,0) NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PLAN_MEDICO (id_plan_medico), --plan_med_codigo
         numero_consulta int  DEFAULT 0,
@@ -130,6 +130,13 @@ CREATE TABLE DATA_PRAXIS.PROFESIONAL ( --OK
 CREATE TABLE DATA_PRAXIS.PROFESIONAL_ESPECIALIDAD (--OK
         id_profesional BIGINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PROFESIONAL (id_profesional),
         id_especialidad numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.ESPECIALIDAD (id_especialidad)
+)
+
+CREATE TABLE [DATA_PRAXIS].[BONO_COMPRA]( --OK
+        id_bono_compra bigint identity(1,1) primary key,
+        fecha_compra DATETIME NOT NULL,
+        id_afiliado bigint FOREIGN KEY references DATA_PRAXIS.AFILIADO (id_afiliado),
+        id_plan_medico numeric(18,0) FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
 )
 
 GO
