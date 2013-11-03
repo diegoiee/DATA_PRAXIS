@@ -125,6 +125,14 @@ CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
         fecha_impresion DATETIME
 )
 
+CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
+	id_bono_farmacia numeric(18,0) primary key,
+	--id_receta bigint FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
+	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
+	precio_compra numeric(18,2) null,
+	fecha_impresion datetime
+)
+
 
 
 
