@@ -1,4 +1,3 @@
-
 begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
@@ -140,15 +139,15 @@ CREATE TABLE [DATA_PRAXIS].[BONO_COMPRA]( --OK
         id_plan_medico numeric(18,0) FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
 )
 
+CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
+        id_bono_consulta numeric(18,0) primary key,
+        id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
+        precio_compra numeric(18,2) null,
+        numero_consulta int,
+        fecha_impresion DATETIME
+)
 
-INSERT INTO DATA_PRAXIS.BONO_CONSULTA
 
-SELECT  A.BONO_CONSULTA_NUMERO,  D.id_bono_compra, NULL, A.COMPRA_BONO_FECHA
-FROM  gd_esquema.Maestra A
-JOIN DATA_PRAXIS.PERSONA  B ON A.PACIENTE_DNI = B.NUMERO_DOCUMENTO
-JOIN DATA_PRAXIS.AFILIADO C ON B.ID_PERSONA = C.ID_PERSONA
-JOIN DATA_PRAXIS.BONO_COMPRA  D ON C.ID_AFILIADO = D.ID_AFILIADO AND D.fecha_compra = A.COMPRA_BONO_FECHA
-WHERE A.Bono_Consulta_Numero IS NOT NULL
 
 
 
@@ -358,6 +357,20 @@ JOIN DATA_PRAXIS.PERSONA P ON  P.numero_documento = M.Paciente_Dni
 JOIN DATA_PRAXIS.AFILIADO A ON  A.id_persona = P.id_persona 
 WHERE M.Compra_Bono_Fecha IS NOT NULL 
 AND (BONO_CONSULTA_NUMERO IS NOT NULL or BONO_FARMACIA_NUMERO is not null)
+
+
+
+--BONO_CONSULTA --OK
+-------------------------
+INSERT INTO DATA_PRAXIS.BONO_CONSULTA
+
+SELECT  A.BONO_CONSULTA_NUMERO,  D.id_bono_compra,E.precio_bono_consulta, NULL, A.COMPRA_BONO_FECHA
+FROM  gd_esquema.Maestra A
+JOIN DATA_PRAXIS.PERSONA  B ON A.PACIENTE_DNI = B.NUMERO_DOCUMENTO
+JOIN DATA_PRAXIS.AFILIADO C ON B.ID_PERSONA = C.ID_PERSONA
+JOIN DATA_PRAXIS.BONO_COMPRA  D ON C.ID_AFILIADO = D.ID_AFILIADO AND D.fecha_compra = A.COMPRA_BONO_FECHA
+JOIN DATA_PRAXIS.PLAN_MEDICO E ON E.id_plan_medico = C.id_plan_medico
+WHERE A.Bono_Consulta_Numero IS NOT NULL
 
 commit tran t1;
 
