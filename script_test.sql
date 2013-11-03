@@ -1,4 +1,3 @@
-
 begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
@@ -331,3 +330,16 @@ commit tran t1;
 /*SELECT Compra_Bono_Fecha, DATA_PRAXIS.obtener_id_afiliado(Paciente_Dni), Plan_Med_Codigo
 from gd_esquema.Maestra
 where Paciente_Dni is not null*/
+
+
+--BONO_COMPRA
+--------------
+
+INSERT INTO BONO_COMPRA(fecha_compra,id_afiliado,id_plan_medico)
+
+SELECT  M.Compra_Bono_Fecha, A.id_afiliado,Plan_Med_Codigo
+FROM gd_esquema.Maestra M
+JOIN DATA_PRAXIS.PERSONA P ON  P. numero_documento = M.Paciente_Dni
+JOIN DATA_PRAXIS.AFILIADO A ON  A.id_persona = P.id_persona 
+WHERE M.Compra_Bono_Fecha IS NOT NULL 
+AND (BONO_CONSULTA_NUMERO IS NOT NULL or BONO_FARMACIA_NUMERO is not null)
