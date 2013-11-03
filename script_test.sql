@@ -1,11 +1,28 @@
+
 begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
 
+--EXEC('DROP SCHEMA DATA_PRAXIS')
 
 
 
-
+/*
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
+AS
+BEGIN
+	DECLARE @id_persona_retorno numeric(18,0)
+	SET @id_persona_retorno = (	SELECT id_persona 
+					FROM  DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+*/
 
 
 
@@ -95,7 +112,7 @@ CREATE TABLE DATA_PRAXIS.ESPECIALIDAD( --OK
 
 
 CREATE TABLE DATA_PRAXIS.AFILIADO ( --OK
-        id_afiliado BIGINT PRIMARY KEY,
+        id_afiliado BIGINT primary key,
         id_persona BIGINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PERSONA (id_persona),
         id_plan_medico numeric(18,0) NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PLAN_MEDICO (id_plan_medico), --plan_med_codigo
         numero_consulta int  DEFAULT 0,
@@ -123,9 +140,10 @@ CREATE TABLE [DATA_PRAXIS].[BONO_COMPRA]( --OK
         id_plan_medico numeric(18,0) FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
 )
 
+CREATE INDEX pepito
+ON DATA_PRAXIS.PERSONA(numero_documento)
+
 GO
-
-
 
 --////////////////////////////////////////////////
 --  /////    Section - Functions     ///////////////
@@ -135,7 +153,7 @@ CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
 (
 	@dni numeric(18,0)
 )
-RETURNS BIGINT   --   CONSULTAR CON DIEGO �STO!!!!!!!!!!!
+RETURNS BIGINT   
 AS
 BEGIN
 	DECLARE @id_persona_retorno BIGINT
@@ -314,23 +332,25 @@ WHERE id_persona=(SELECT aux.id_persona FROM DATA_PRAXIS.PERSONA aux where aux.n
 FROM
 (SELECT DISTINCT Medico_Dni, Especialidad_Codigo FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
 
+
+
+
+--BONO_COMPRA --OK
+-------------------------
+INSERT INTO DATA_PRAXIS.BONO_COMPRA(fecha_compra,id_afiliado,id_plan_medico)
+
+SELECT  DISTINCT M.Compra_Bono_Fecha, A.id_afiliado,Plan_Med_Codigo
+FROM gd_esquema.Maestra M
+JOIN DATA_PRAXIS.PERSONA P ON  P.numero_documento = M.Paciente_Dni
+JOIN DATA_PRAXIS.AFILIADO A ON  A.id_persona = P.id_persona 
+WHERE M.Compra_Bono_Fecha IS NOT NULL 
+AND (BONO_CONSULTA_NUMERO IS NOT NULL or BONO_FARMACIA_NUMERO is not null)
+
 commit tran t1;
 
 
 
-/*SELECT Compra_Bono_Fecha, DATA_PRAXIS.obtener_id_afiliado(Paciente_Dni), Plan_Med_Codigo
-from gd_esquema.Maestra
-where Paciente_Dni is not null*/
 
 
---BONO_COMPRA
---------------
 
-INSERT INTO BONO_COMPRA(fecha_compra,id_afiliado,id_plan_medico)
 
-SELECT  M.Compra_Bono_Fecha, A.id_afiliado,Plan_Med_Codigo
-FROM gd_esquema.Maestra M
-JOIN DATA_PRAXIS.PERSONA P ON  P. numero_documento = M.Paciente_Dni
-JOIN DATA_PRAXIS.AFILIADO A ON  A.id_persona = P.id_persona 
-WHERE M.Compra_Bono_Fecha IS NOT NULL 
-AND (BONO_CONSULTA_NUMERO IS NOT NULL or BONO_FARMACIA_NUMERO is not null)
