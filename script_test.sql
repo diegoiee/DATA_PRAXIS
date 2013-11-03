@@ -142,14 +142,14 @@ CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
 
 CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
         [fecha_turno] [date] not null,
-        [id_horario_turno] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
+        [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
         [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
         [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
         [id_turno] [numeric](18,0) null,
         [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
         [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
         [id_estado_turno] [int] null,
-        constraint pk_agenda primary key(fecha,id_horario_turno,id_profesional)
+        constraint pk_agenda primary key(fecha_turno,id_horario_turno,id_profesional)
 )
 
 
