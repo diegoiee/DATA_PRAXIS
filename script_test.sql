@@ -133,7 +133,10 @@ CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	fecha_impresion datetime
 )
 
-
+CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
+id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
+descripcion_medicamento VARCHAR(255)
+)
 
 
 
@@ -219,6 +222,7 @@ VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concu
 
 INSERT INTO DATA_PRAXIS.ESTADO_TURNO (id_estado_turno, estado_turno)
 VALUES (1,'DISPONIBLE'), (2,'OTORGADO')
+
 
 --//////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////////////////////////////////////////////////////////////
@@ -371,8 +375,15 @@ JOIN DATA_PRAXIS.BONO_COMPRA  D ON C.ID_AFILIADO = D.ID_AFILIADO AND D.fecha_com
 JOIN DATA_PRAXIS.PLAN_MEDICO E ON E.id_plan_medico = C.id_plan_medico
 WHERE A.Bono_farmacia_Numero IS NOT NULL
 
-commit tran t1;
 
+--MEDICAMENTOS 
+
+INSERT INTO DATA_PRAXIS.MEDICAMENTO (descripcion_medicamento)
+SELECT  DISTINCT Bono_Farmacia_Medicamento
+FROM  gd_esquema.Maestra 
+WHERE Bono_Farmacia_Medicamento IS NOT NULL
+
+commit tran t1;
 
 
 
