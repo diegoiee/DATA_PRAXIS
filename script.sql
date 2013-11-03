@@ -50,7 +50,7 @@ CREATE TABLE [DATA_PRAXIS.PERSONA] ( --OK
 	direccion VARCHAR(255) NOT NULL,          	--paciente_direccion o medico_direccion
 	mail VARCHAR(255) NOT NULL,              	--paciente_mail o medico_mail
 	fecha_nacimiento DATETIME NOT NULL,      	--paciente_fecha_nac o medico_fecha_nac
-	id_sexo TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS].SEXO (id_sexo),
+	id_sexo TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS.SEXO] (id_sexo),
 	cantidad_familiares_a_cargo INT  NOT NULL DEFAULT 0,
 	id_estado_civil TINYINT FOREIGN KEY REFERENCES [DATA_PRAXIS.ESTADO_CIVIL] (id_estado_civil)
 )
