@@ -3,6 +3,62 @@ EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
 --EXEC('DROP SCHEMA DATA_PRAXIS')
 
+--////////////////////////////////////////////////
+--  /////    Section - Functions     ///////////////
+--////////////////////////////////////////////////
+
+/*
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+AS
+BEGIN
+	DECLARE @id_persona_retorno numeric(18,0)
+	SET @id_persona_retorno = (	SELECT id_persona 
+					FROM  DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+*/
+
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+AS
+BEGIN
+	DECLARE @id_persona_retorno NUMERIC(18,0)
+	SET @id_persona_retorno = (	SELECT id_persona 
+					FROM  DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+
+
+CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_AFILIADO
+(
+	@dni numeric(18,0)
+)
+RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
+AS
+BEGIN
+	DECLARE @id_persona_afiliado numeric(18,0)
+	SET @id_afiliado_retorno = (	SELECT id_afiliado
+					FROM  DATA_PRAXIS.PERSONA 
+					WHERE numero_documento = @dni)
+	RETURN @id_persona_retorno 
+END
+GO
+
+
+-- Tables creation Section
+
+
 
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
 	id_tipo_documento TINYINT PRIMARY KEY,
@@ -109,20 +165,9 @@ CREATE TABLE DATA_PRAXIS.PROFESIONAL_ESPECIALIDAD (--OK
 GO
 
 
-CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
-(
-	@dni numeric(18,0)
-)
-RETURNS BIGINT   --   CONSULTAR CON DIEGO ÉSTO!!!!!!!!!!!
-AS
-BEGIN
-	DECLARE @id_persona_retorno numeric(18,0)
-	SET @id_persona_retorno = (	SELECT id_persona 
-					FROM  DATA_PRAXIS.PERSONA 
-					WHERE numero_documento = @dni)
-	RETURN @id_persona_retorno 
-END
-GO
+
+
+
 
 
 --select dbo.Obtener_id_Persona(Paciente_dni) from gd_esquema.Maestra
