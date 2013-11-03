@@ -134,9 +134,31 @@ CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 )
 
 CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
-id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
-descripcion_medicamento VARCHAR(255)
+	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
+	descripcion_medicamento VARCHAR(255)
 )
+
+CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
+        id_consulta BIGINT identity(1,1) PRIMARY KEY,
+        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
+        horario_llegada datetime null,
+        sintomas varchar(255) null,
+        diagnostico varchar(255) null
+)
+
+CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
+        [fecha_turno] [date] not null,
+        [id_horario_turno] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
+        [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+        [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
+        [id_turno] [numeric](18,0) null,
+        [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
+        [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
+        [id_estado_turno] [int] null,
+        constraint pk_agenda primary key(fecha,id_horario_turno,id_profesional)
+)
+
+
 
 
 
