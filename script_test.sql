@@ -457,7 +457,7 @@ from (
 	select * --este select deberia traer solamente los turnos reservados sin concretar
 	from gd_esquema.Maestra 
 	where 
-	Medico_Dni is not null and 
+	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
 	Turno_numero is not null and
 	compra_bono_fecha is null and
 	consulta_sintomas is null) a
