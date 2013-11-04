@@ -450,13 +450,13 @@ WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
 --AGENDA(solo  reserva sin concretar)
 -------------------------------------
-insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id,turno,id_afiliado,id_especialidad,id_estado_turno)
+insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_consulta,id_turno,id_afiliado,id_especialidad,id_estado_turno)
 
 select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, NULL as 'id_consulta', a.Turno_Numero, f.id_afiliado, a.Especialidad_Codigo, 2
 from (
 	select * --este select deberia traer solamente los turnos reservados sin concretar
 	from gd_esquema.Maestra 
-	where 
+	where
 	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
 	Turno_numero is not null and
 	compra_bono_fecha is null and
@@ -478,7 +478,6 @@ Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta pa
 */
 
 commit tran t1;
-
 
 
 
