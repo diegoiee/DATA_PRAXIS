@@ -450,7 +450,7 @@ WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
 --AGENDA(solo  reserva sin concretar)
 -------------------------------------
-insert into datapraxis.agenda(fecha_turno,id_horario_turno,id_profesional,id,turno,id_afiliado,id_especialidad,id_estado_turno)
+insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id,turno,id_afiliado,id_especialidad,id_estado_turno)
 
 select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, NULL as 'id_consulta', a.Turno_Numero, f.id_afiliado, a.Especialidad_Codigo, 2
 from (
