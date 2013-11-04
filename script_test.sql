@@ -440,7 +440,8 @@ JOIN DATA_PRAXIS.PLAN_MEDICO E ON E.id_plan_medico = C.id_plan_medico
 WHERE A.Bono_farmacia_Numero IS NOT NULL
 
 
---MEDICAMENTOS 
+--MEDICAMENTOS
+---------------
 
 INSERT INTO DATA_PRAXIS.MEDICAMENTO (descripcion_medicamento)
 SELECT  DISTINCT Bono_Farmacia_Medicamento
@@ -448,6 +449,7 @@ FROM  gd_esquema.Maestra
 WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
 --AGENDA(solo  reserva sin concretar)
+-------------------------------------
 insert into datapraxis.agenda(fecha_turno,id_horario_turno,id_profesional,id,turno,id_afiliado,id_especialidad,id_estado_turno)
 
 select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, NULL as 'id_consulta', a.Turno_Numero, f.id_afiliado, a.Especialidad_Codigo, 2
@@ -465,6 +467,15 @@ left join data_praxis.persona c on c.numero_documento=a.Paciente_Dni
 left join data_praxis.persona d on d.numero_documento=a.Medico_Dni
 left join data_praxis.profesional e on d.id_persona=e.id_persona
 left join data_praxis.afiliado f on c.id_persona=f.id_persona
+
+
+--CONSULTA
+-----------
+
+/*
+Pregunta1: En la tabla maestra, un turno concretado tiene tambien otro registro con el mismo nroTurno para representar la reserva? o cuando se concreta el turno se completan los campos faltantes... ver si hay nro de turno repetido para una misma turno_fecha.
+Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta para que sirve, que sentido tiene que exista? complicar la migracion?
+*/
 
 commit tran t1;
 
