@@ -1,5 +1,28 @@
 begin tran
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[CAMBIO_PLAN_HIST]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.CAMBIO_PLAN_HIST 
+
+
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ROL_FUNCIONALIDAD]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.ROL_FUNCIONALIDAD 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[USUARIO_ROL]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.USUARIO_ROL 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ROL]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.ROL 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[FUNCIONALIDAD]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.FUNCIONALIDAD
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[USUARIO]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.USUARIO 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_USUARIO]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.ESTADO_USUARIO 
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[AGENDA]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.AGENDA
 
@@ -43,7 +66,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS
 DROP TABLE DATA_PRAXIS.PERSONA 
 
 
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[TIPO_DOCUMENTO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.TIPO_DOCUMENTO 
 
@@ -56,15 +78,9 @@ DROP TABLE DATA_PRAXIS.HORARIO_TURNO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_TURNO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ESTADO_TURNO 
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ROL]') AND type in (N'U'))
-DROP TABLE DATA_PRAXIS.ROL 
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[FUNCIONALIDAD]') AND type in (N'U'))
-DROP TABLE DATA_PRAXIS.FUNCIONALIDAD
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[PLAN_MEDICO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.PLAN_MEDICO 
-
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_CIVIL]') AND type in (N'U'))
@@ -92,10 +108,6 @@ commit tran
 
 begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
-
-
-
-) 
 
 
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
@@ -134,37 +146,11 @@ CREATE TABLE DATA_PRAXIS.ROL (
 )
 
 CREATE TABLE DATA_PRAXIS.FUNCIONALIDAD (
-	id_func INT IDENTITY(1,1) PRIMARY KEY,
-	desc_func VARCHAR(255) NOT NULL,
+	id_funcionalidad INT IDENTITY(1,1) PRIMARY KEY,
+	descripcion_funcionalidad VARCHAR(255) NOT NULL,
 	estado_funcionalidad TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
 
-CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
-        [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
-        [id_persona] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
-        [clave_usuario] [VARCHAR](255) NOT NULL,
-        [intentos_ingreso] [int] NOT NULL DEFAULT 0,
-        [id_estado_usuario] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario),
-)
-
-CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
-        [id_rol] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
-        [id_funcionalidad] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[FUNCIONALIDAD](id_funcionalidad)
-)
-
-CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
-        [id_usuario] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
-        [id_rol] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
-)
-
-CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
-        [id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
-        [fecha_modificacion] [datetime] not null,
-        [id_plan_viejo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
-        [id_plan_nuevo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
-        [motivo_del_cambio] [varchar](255) null
-        constraint pk_historial_cambio_planes_t PRIMARY KEY (id_usuario, fecha_modificacion)
-)
 
 
 CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
@@ -182,6 +168,29 @@ CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	id_estado_civil TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
 )
 
+CREATE TABLE [DATA_PRAXIS].[ESTADO_USUARIO] (-- revisar longitud password
+        [id_estado_usuario] [TINYINT] PRIMARY KEY IDENTITY(1,1),
+        descripcion_estado_usuario varchar(20)
+)
+
+CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
+        [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [id_persona] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
+        [clave_usuario] [VARCHAR](255) NOT NULL,
+        [intentos_ingreso] [int] NOT NULL DEFAULT 0,
+        [id_estado_usuario] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario),
+)
+
+CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
+        [id_rol] int NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
+        [id_funcionalidad] int NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[FUNCIONALIDAD](id_funcionalidad)
+)
+
+CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
+        [id_usuario] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [id_rol] int not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
+)
+
 CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 	id_plan_medico NUMERIC(18,0) PRIMARY KEY,      --plan_med_codigo
 	desc_plan_medico VARCHAR(255) NULL,            --plan_med_descripcion
@@ -190,6 +199,18 @@ CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 	precio_bono_farmacia numeric(18,0),            --plan_med_precio_bono_farmacia
 	fecha_asiento_precio_bono_farmacia DATETIME
 )
+
+CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
+        [id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [fecha_modificacion] [datetime] not null,
+        [id_plan_viejo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [id_plan_nuevo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [motivo_del_cambio] [varchar](255) null
+        constraint pk_historial_cambio_planes_t PRIMARY KEY (id_usuario, fecha_modificacion)
+)
+
+
+
 
 
 CREATE TABLE DATA_PRAXIS.TIPO_ESPECIALIDAD( --OK
@@ -293,23 +314,7 @@ CREATE TABLE [DATA_PRAXIS].[AGENDA](
 )
 
 
-CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
-	id_tipo_cancelacion TINYINT PRIMARY KEY,
-	descripcion_tipo_cancelacion VARCHAR(255) NOT NULL
-)
 
-CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
-	[fecha_turno] [DATE] not null,
-	[id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
- 	[id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
- 	[id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
-	[id_turno] [numeric](18,0) null,
- 	[id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
- 	[id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
- 	[tipo_cancelacíon]  
- 	[id_tipo_cancelacion] TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_CANCELACION (id_tipo_cancelacion),
-	[motivo_cancelacion] VARCHAR(255) NOT NULL, 
- 	constraint pk_agenda primary key(fecha_turno,id_horario_turno,id_profesional)
 
 
 
@@ -634,7 +639,6 @@ Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta pa
 */
 
 commit tran t1;
-
 
 
 
