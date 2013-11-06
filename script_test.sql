@@ -1,6 +1,9 @@
 begin tran
 
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_ROL]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.ESTADO_ROL 
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[TURNO_CANCELADO_HIST]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST 
 
@@ -9,8 +12,6 @@ DROP TABLE DATA_PRAXIS.TIPO_CANCELACION
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[CAMBIO_PLAN_HIST]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.CAMBIO_PLAN_HIST 
-
-
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ROL_FUNCIONALIDAD]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ROL_FUNCIONALIDAD 
@@ -128,6 +129,11 @@ CREATE TABLE DATA_PRAXIS.SEXO ( --OK
 	descripcion_sexo VARCHAR(20) NOT NULL
 )
 
+CREATE TABLE DATA_PRAXIS.ESTADO_ROL ( --OK
+	id_estado_rol TINYINT PRIMARY KEY ,
+	estado_rol VARCHAR(255) NOT NULL
+)
+
 
 CREATE TABLE DATA_PRAXIS.HORARIO_TURNO ( --OK
 	id_horario_turno TINYINT IDENTITY(1,1) PRIMARY KEY,
@@ -149,7 +155,7 @@ CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
 CREATE TABLE DATA_PRAXIS.ROL (
         id_rol INT PRIMARY KEY,
         nombre_rol VARCHAR(20) NOT NULL,
-        estado_rol TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
+        id_estado_rol TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
 
 CREATE TABLE DATA_PRAXIS.FUNCIONALIDAD (
@@ -176,16 +182,17 @@ CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 )
 
 CREATE TABLE [DATA_PRAXIS].[ESTADO_USUARIO] (-- revisar longitud password
-        [id_estado_usuario] [TINYINT] PRIMARY KEY IDENTITY(1,1),
-        descripcion_estado_usuario varchar(20)
+        [id_estado_usuario] [TINYINT] PRIMARY KEY  ,
+        estado_usuario varchar(255)
 )
 
 CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
-        [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [id_usuario] [BIGINT]  PRIMARY KEY IDENTITY(1,1),
         [id_persona] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
+        [nombre_usuario] [VARCHAR](255)  NOT NULL,  
         [clave_usuario] [VARCHAR](255) NOT NULL,
         [intentos_ingreso] [int] NOT NULL DEFAULT 0,
-        [id_estado_usuario] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario),
+        [id_estado_usuario] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario) DEFAULT 1
 )
 
 CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
@@ -215,9 +222,6 @@ CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
         [motivo_del_cambio] [varchar](255) null
         constraint pk_historial_cambio_planes_t PRIMARY KEY (id_usuario, fecha_modificacion)
 )
-
-
-
 
 
 CREATE TABLE DATA_PRAXIS.TIPO_ESPECIALIDAD( --OK
@@ -335,12 +339,10 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
   [id_turno] [numeric](18,0) null,
    [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
    [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
-   [tipo_cancelacíon]  
-  [id_tipo_cancelacion] TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_CANCELACION (id_tipo_cancelacion),
+  [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
   [motivo_cancelacion] VARCHAR(255) NOT NULL, 
-  constraint pk_agenda primary key(fecha_turno,id_horario_turno,id_profesional)
-
-
+  constraint pk_turno_cancelado primary key(fecha_turno,id_horario_turno,id_profesional)
+)
 
 CREATE INDEX pepito
 ON DATA_PRAXIS.PERSONA(numero_documento)
@@ -406,6 +408,40 @@ INSERT INTO DATA_PRAXIS.TIPO_DOCUMENTO (id_tipo_documento, descripcion_tipo_docu
 INSERT INTO DATA_PRAXIS.SEXO (id_sexo, descripcion_sexo)
 	VALUES(1,'MUJER'),(2,'HOMBRE')
 
+
+
+--ESTADO ROL
+--------------------
+
+INSERT INTO DATA_PRAXIS.ESTADO_ROL (id_estado_rol,estado_rol)
+	VALUES (0,'INACTIVO'),(1,'ACTIVO')
+
+--ESTADO USUARIO
+--------------------
+
+
+INSERT INTO DATA_PRAXIS.ESTADO_USUARIO (id_estado_usuario,estado_usuario)
+	VALUES (0,'INACTIVO'),(1,'ACTIVO')
+
+
+
+--ROL -- OK
+------------
+
+INSERT INTO DATA_PRAXIS.ROL (id_rol, nombre_rol, id_estado_rol)
+	VALUES (1,'Afiliado',0),(2,'Profesional',0),(3,'Administrativo',0
+	)
+	
+	
+	
+-- INSERT USUARIO ADMINISTRADOR
+------------------------------------------
+
+INSERT INTO DATA_PRAXIS.USUARIO (  nombre_usuario,clave_usuario,id_estado_usuario)
+  	VALUES ('Admin','w23e',1)
+
+
+
 --HORARIO_TURNO --OK
 --------------------
 
@@ -464,7 +500,7 @@ values
 -------------------
 
 INSERT INTO DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil, descripcion_estado_civil)
-VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concubino/a'),(6,'Difunto/a')
+VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concubino/a')
 
 --Estado-Turno --OK
 -------------------
@@ -663,6 +699,5 @@ Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta pa
 */
 
 commit tran t1;
-
 
 
