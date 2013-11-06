@@ -219,7 +219,7 @@ CREATE TABLE DATA_PRAXIS.RECETA_MEDICAMENTO  (
 	id_receta_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
 	id_receta FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
 	id_medicamento FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
-	cantidad_medicamento int not null default 1
+	cantidad_medicamento tinyint not null default 1
 )
 
 CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
