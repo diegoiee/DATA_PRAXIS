@@ -119,18 +119,33 @@ CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
         fecha_impresion DATETIME
 )
 
+CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
+	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
+	descripcion_medicamento VARCHAR(255)
+)
+
+CREATE TABLE DATA_PRAXIS.RECETA  (
+	id_receta BIGINT IDENTITY(1,1) PRIMARY KEY,
+	id_consulta FOREIGN KEY references DATA_PRAXIS.CONSULTA (id_consulta)
+)
+
+CREATE TABLE DATA_PRAXIS.RECETA_MEDICAMENTO  (
+	id_receta_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
+	id_receta FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
+	id_medicamento FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
+	cantidad_medicamento int not null default 1
+)
+
 CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	id_bono_farmacia numeric(18,0) primary key,
 	--id_receta bigint FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
 	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
 	precio_compra numeric(18,2) null,
-	fecha_impresion datetime
+	fecha_impresion datetime,
+	id_receta_medicamento FOREIGN KEY references DATA_PRAXIS.RECETA_MEDICAMENTO (id_receta_medicamento)
 )
 
-CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
-	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
-	descripcion_medicamento VARCHAR(255)
-)
+
 
 CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
         id_consulta BIGINT identity(1,1) PRIMARY KEY,
