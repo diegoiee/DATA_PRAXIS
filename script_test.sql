@@ -211,6 +211,14 @@ CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
         fecha_impresion DATETIME
 )
 
+CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
+        id_consulta BIGINT identity(1,1) PRIMARY KEY,
+        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
+        horario_llegada datetime null,
+        sintomas varchar(255) null,
+        diagnostico varchar(255) null
+)
+
 CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
 	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
 	descripcion_medicamento VARCHAR(255)
@@ -218,13 +226,13 @@ CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
 
 CREATE TABLE DATA_PRAXIS.RECETA  (
 	id_receta BIGINT IDENTITY(1,1) PRIMARY KEY,
-	id_consulta FOREIGN KEY references DATA_PRAXIS.CONSULTA (id_consulta)
+	id_consulta BIGINT FOREIGN KEY references DATA_PRAXIS.CONSULTA (id_consulta)
 )
 
 CREATE TABLE DATA_PRAXIS.RECETA_MEDICAMENTO  (
 	id_receta_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
-	id_receta FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
-	id_medicamento FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
+	id_receta BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
+	id_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
 	cantidad_medicamento tinyint not null default 1
 )
 
@@ -234,18 +242,12 @@ CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
 	precio_compra numeric(18,2) null,
 	fecha_impresion datetime,
-	id_receta_medicamento FOREIGN KEY references DATA_PRAXIS.RECETA_MEDICAMENTO (id_receta_medicamento)
+	id_receta_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA_MEDICAMENTO (id_receta_medicamento)
 )
 
 
 
-CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
-        id_consulta BIGINT identity(1,1) PRIMARY KEY,
-        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
-        horario_llegada datetime null,
-        sintomas varchar(255) null,
-        diagnostico varchar(255) null
-)
+
 
 CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
         [fecha_turno] [date] not null,
@@ -538,7 +540,7 @@ WHERE A.Bono_Consulta_Numero IS NOT NULL
 -------------------------
 INSERT INTO DATA_PRAXIS.BONO_FARMACIA
 
-SELECT  A.BONO_FARMACIA_NUMERO,  D.id_bono_compra,E.precio_bono_farmacia, A.COMPRA_BONO_FECHA
+SELECT  A.BONO_FARMACIA_NUMERO,  D.id_bono_compra,E.precio_bono_farmacia, A.COMPRA_BONO_FECHA, NULL
 FROM  gd_esquema.Maestra A
 JOIN DATA_PRAXIS.PERSONA  B ON A.PACIENTE_DNI = B.NUMERO_DOCUMENTO
 JOIN DATA_PRAXIS.AFILIADO C ON B.ID_PERSONA = C.ID_PERSONA
@@ -585,7 +587,6 @@ Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta pa
 */
 
 commit tran t1;
-
 
 
 
