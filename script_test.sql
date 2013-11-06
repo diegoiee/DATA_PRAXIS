@@ -277,7 +277,7 @@ CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
 CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
         id_consulta BIGINT identity(1,1) PRIMARY KEY,
         id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
-        horario_llegada datetime null,
+        horario_llegada time null,
         sintomas varchar(255) null,
         diagnostico varchar(255) null
 )
@@ -699,6 +699,26 @@ left join data_praxis.afiliado f on c.id_persona=f.id_persona
 Pregunta1: En la tabla maestra, un turno concretado tiene tambien otro registro con el mismo nroTurno para representar la reserva? o cuando se concreta el turno se completan los campos faltantes... ver si hay nro de turno repetido para una misma turno_fecha.
 Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta para que sirve, que sentido tiene que exista? complicar la migracion?
 */
+
+merge into data_praxis.consulta as a
+using (
+SELECT M.turno_numero,M.especialidad_codigo,M.turno_fecha,X.id_horario_turno,M.bono_consulta_numero,M.consulta_sintomas,M.consulta_enfermedades,z.id_profesional,zz.id_afiliado
+FROM gd_esquema.Maestra M
+LEFT JOIN DATA_PRAXIS.HORARIO_TURNO X ON CAST(M.turno_fecha as TIME)=X.horario_turno
+LEFT JOIN DATA_PRAXIS.PERSONA Y ON M.medico_dni=Y.numero_documento
+LEFT JOIN DATA_PRAXIS.PROFESIONAL Z ON Y.id_persona=Z.id_persona
+LEFT JOIN DATA_PRAXIS.AFILIADO ZZ ON Y.id_persona=ZZ.id_persona
+WHERE M.Bono_Farmacia_Numero IS NOT NULL
+AND M.Bono_Consulta_Numero IS NOT NULL
+AND	M.Medico_Dni IS NOT NULL
+AND	M.Turno_Numero IS NOT NULL
+AND	M.Compra_Bono_Fecha IS NULL
+AND	M.Consulta_Sintomas IS NOT NULL) as b
+on 0=1 --modify this predicate as necessary
+when not matched then insert (id_bono_consulta,horario_llegada,sintomas,diagnostico)
+values (b.bono_consulta_numero,NULL,b.consulta_sintomas,b.consulta_enfermedades)
+output CAST(b.turno_fecha AS DATE),b.id_horario_turno,b.id_profesional,inserted.id_consulta,b.turno_numero,b.id_afiliado,b.especialidad_codigo,1 into data_praxis.agenda;
+
 
 commit tran t1;
 
