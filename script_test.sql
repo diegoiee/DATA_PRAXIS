@@ -135,6 +135,33 @@ CREATE TABLE DATA_PRAXIS.FUNCIONALIDAD (
 	estado_funcionalidad TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
 
+CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
+        [id_usuario] [BIGINT] PRIMARY KEY IDENTITY(1,1),
+        [id_persona] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[PERSONA] (id_persona),
+        [clave_usuario] [VARCHAR](255) NOT NULL,
+        [intentos_ingreso] [int] NOT NULL DEFAULT 0,
+        [id_estado_usuario] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario),
+)
+
+CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
+        [id_rol] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
+        [id_funcionalidad] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[FUNCIONALIDAD](id_funcionalidad)
+)
+
+CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
+        [id_usuario] [BIGINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [id_rol] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ROL](id_rol),
+)
+
+CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
+        [id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+        [fecha_modificacion] [datetime] not null,
+        [id_plan_viejo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [id_plan_nuevo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
+        [motivo_del_cambio] [varchar](255) null
+        constraint pk_historial_cambio_planes_t PRIMARY KEY (id_usuario, fecha_modificacion)
+)
+
 
 CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	id_persona BIGINT IDENTITY(1,1) PRIMARY KEY,
