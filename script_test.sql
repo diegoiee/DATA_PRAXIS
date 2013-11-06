@@ -94,6 +94,10 @@ begin tran t1;
 EXEC('CREATE SCHEMA DATA_PRAXIS AUTHORIZATION gd')
 
 
+
+) 
+
+
 CREATE TABLE DATA_PRAXIS.TIPO_DOCUMENTO ( --OK
 	id_tipo_documento TINYINT PRIMARY KEY,
 	descripcion_tipo_documento VARCHAR(20) NOT NULL
@@ -289,7 +293,23 @@ CREATE TABLE [DATA_PRAXIS].[AGENDA](
 )
 
 
+CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
+	id_tipo_cancelacion TINYINT PRIMARY KEY,
+	descripcion_tipo_cancelacion VARCHAR(255) NOT NULL
+)
 
+CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
+	[fecha_turno] [DATE] not null,
+	[id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
+ 	[id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+ 	[id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
+	[id_turno] [numeric](18,0) null,
+ 	[id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
+ 	[id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
+ 	[tipo_cancelacíon]  
+ 	[id_tipo_cancelacion] TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_CANCELACION (id_tipo_cancelacion),
+	[motivo_cancelacion] VARCHAR(255) NOT NULL, 
+ 	constraint pk_agenda primary key(fecha_turno,id_horario_turno,id_profesional)
 
 
 
