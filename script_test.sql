@@ -352,7 +352,7 @@ GO
 --////////////////////////////////////////////////
 --  /////    Section - Functions     ///////////////
 --////////////////////////////////////////////////
-
+/*
 CREATE FUNCTION DATA_PRAXIS.OBTENER_ID_PERSONA
 (
 	@dni numeric(18,0)
@@ -384,7 +384,7 @@ END
 GO
 
 ----
-
+*/
 
 
 --select dbo.Obtener_id_Persona(Paciente_dni) from gd_esquema.Maestra
@@ -590,20 +590,22 @@ where Especialidad_Codigo is not null
 INSERT INTO DATA_PRAXIS.AFILIADO                                 
 SELECT
 (ROW_NUMBER()OVER(order by Paciente_Dni))*100,
-DATA_PRAXIS.OBTENER_ID_PERSONA(asd.Paciente_Dni),
-asd.Plan_Med_Codigo,
+b.id_persona,
+a.Plan_Med_Codigo,
 0,
 NULL
-FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) asd
+FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) a
+join data_praxis.PERSONA b on a.paciente_dni=b.numero_documento
 
 --PROFESIONAL --OK
 -------------
 INSERT INTO DATA_PRAXIS.PROFESIONAL
 SELECT
-DATA_PRAXIS.OBTENER_ID_PERSONA(asd.Medico_Dni),
+b.id_persona,
 NULL,
 NULL
-FROM (SELECT distinct Medico_Dni FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
+FROM (SELECT distinct Medico_Dni FROM gd_esquema.Maestra WHERE Medico_Dni is not null) a
+join data_praxis.PERSONA b on a.medico_dni=b.numero_documento
 
 
 
