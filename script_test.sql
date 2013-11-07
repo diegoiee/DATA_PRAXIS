@@ -683,7 +683,7 @@ from (
 	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
 	compra_bono_fecha is null and
 	consulta_sintomas is null and
-	Turno_numero not in
+		Turno_numero not in
 		(select distinct turno_numero from gd_esquema.Maestra
 		where
 		Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
