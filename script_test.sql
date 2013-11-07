@@ -438,7 +438,7 @@ INSERT INTO DATA_PRAXIS.ROL (id_rol, nombre_rol, id_estado_rol)
 ------------------------------------------
 
 INSERT INTO DATA_PRAXIS.USUARIO (  nombre_usuario,clave_usuario,id_estado_usuario)
-  	VALUES ('Admin','w23e',1)
+  	VALUES ('Admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1)
 
 
 
