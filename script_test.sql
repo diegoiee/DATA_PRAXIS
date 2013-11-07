@@ -678,12 +678,22 @@ insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_co
 select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, NULL as 'id_consulta', a.Turno_Numero, f.id_afiliado, a.Especialidad_Codigo, 2
 from (
 	select * --este select deberia traer solamente los turnos reservados sin concretar
-	from gd_esquema.Maestra 
+	from gd_esquema.Maestra GG
 	where
 	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
-	Turno_numero is not null and
 	compra_bono_fecha is null and
-	consulta_sintomas is null) a
+	consulta_sintomas is null and
+	Turno_numero not in
+		(select distinct turno_numero from gd_esquema.Maestra
+		where
+		Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
+		Turno_numero is not null and
+		compra_bono_fecha is null and
+		consulta_sintomas is not null and
+		Bono_Farmacia_Numero is not null and
+		Bono_Consulta_Numero is not null
+		)
+	) a
 
 left join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
 left join data_praxis.persona c on c.numero_documento=a.Paciente_Dni 
