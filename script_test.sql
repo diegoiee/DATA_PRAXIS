@@ -702,6 +702,8 @@ left join data_praxis.profesional e on d.id_persona=e.id_persona
 left join data_praxis.afiliado f on c.id_persona=f.id_persona
 
 
+
+
 --CONSULTA
 -----------
 
@@ -730,6 +732,13 @@ values (b.bono_consulta_numero,NULL,b.consulta_sintomas,b.consulta_enfermedades)
 output CAST(b.turno_fecha AS DATE),b.id_horario_turno,b.id_profesional,inserted.id_consulta,b.turno_numero,b.id_afiliado,b.especialidad_codigo,1 into data_praxis.agenda;
 
 
-commit tran t1;
+--RECETA
+-------------
 
+INSERT INTO DATA_PRAXIS.RECETA  (id_consulta)
+SELECT   C.id_consulta
+FROM DATA_PRAXIS.CONSULTA C
+
+
+commit tran t1;
 
