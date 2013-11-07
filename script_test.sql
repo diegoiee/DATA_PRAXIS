@@ -739,6 +739,15 @@ INSERT INTO DATA_PRAXIS.RECETA  (id_consulta)
 SELECT   C.id_consulta
 FROM DATA_PRAXIS.CONSULTA C
 
+--RECETA_MEDICAMENTO
+
+insert into data_praxis.receta_medicamento(id_receta,id_medicamento,cantidad_medicamento)
+select e.id_receta,b.id_medicamento,1 from gd_esquema.Maestra a
+join DATA_PRAXIS.MEDICAMENTO b on a.Bono_Farmacia_Medicamento=b.descripcion_medicamento
+join DATA_PRAXIS.AGENDA c on a.Turno_Numero=c.id_turno
+join DATA_PRAXIS.CONSULTA d on c.id_consulta=d.id_consulta
+join DATA_PRAXIS.RECETA e on e.id_consulta=d.id_consulta
+
 
 commit tran t1;
 
