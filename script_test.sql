@@ -748,6 +748,24 @@ join DATA_PRAXIS.AGENDA c on a.Turno_Numero=c.id_turno
 join DATA_PRAXIS.CONSULTA d on c.id_consulta=d.id_consulta
 join DATA_PRAXIS.RECETA e on e.id_consulta=d.id_consulta
 
+--ACTUALIZACION DE BONO FARMACIA (campo id_receta_medicamento)
+MERGE INTO DATA_PRAXIS.BONO_FARMACIA T
+   USING (
+   
+select f.id_receta_medicamento,a.bono_farmacia_numero 
+from gd_esquema.Maestra a
+join DATA_PRAXIS.MEDICAMENTO b on a.Bono_Farmacia_Medicamento=b.descripcion_medicamento
+join DATA_PRAXIS.AGENDA c on a.Turno_Numero=c.id_turno
+join DATA_PRAXIS.CONSULTA d on c.id_consulta=d.id_consulta
+join DATA_PRAXIS.RECETA e on e.id_consulta=d.id_consulta
+join DATA_PRAXIS.RECETA_MEDICAMENTO f on e.id_receta=f.id_receta
+) S 
+      ON s.bono_farmacia_numero = t.id_bono_farmacia
+        
+WHEN MATCHED THEN
+   UPDATE 
+      SET id_receta_medicamento = S.id_receta_medicamento;
+
 
 commit tran t1;
 
