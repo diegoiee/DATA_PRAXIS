@@ -280,18 +280,18 @@ CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
 )
 
 CREATE TABLE DATA_PRAXIS.AGENDA( 
-		id_agenda BIGINT IDENTITY(1,1) PRIMARY KEY,
+	id_agenda BIGINT IDENTITY(1,1) PRIMARY KEY,
         fecha_turno date not null,
         id_horario_turno TINYINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.HORARIO_TURNO (id_horario_turno),
         id_profesional BIGINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.PROFESIONAL (id_profesional),
         id_especialidad  numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.ESPECIALIDAD (id_especialidad),
+        id_estado_turno int null  
 )
 
 CREATE TABLE [DATA_PRAXIS].[TURNO]( 
         [id_turno] [numeric](18,0) primary key,
         id_agenda bigint foreign key references data_praxis.agenda(id_agenda),
-        [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
-        [id_estado_turno] [int] null      
+        [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado)
 )
 
 CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
