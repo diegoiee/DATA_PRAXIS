@@ -801,15 +801,27 @@ WHEN MATCHED THEN
 --ACTUALIZACION CAMPO NRO CONSULTA DE CADA BONO
 
 MERGE INTO DATA_PRAXIS.bono_consulta T
-   USING (select b.id_afiliado,a.id_bono_consulta,ROW_NUMbER() OVER (partition by b.id_afiliado ORDER BY b.fecha_compra) as 'cantidad'
-from data_praxis.bono_consulta a
-join data_praxis.bono_compra b on a.id_bono_compra=b.id_bono_compra
- ) S 
-      ON s.id_bono_consulta = t.id_bono_consulta
+   USING 
+   (	select b.id_afiliado,a.id_bono_consulta,ROW_NUMbER() OVER (partition by b.id_afiliado ORDER BY b.fecha_compra) as 'cantidad'
+	from data_praxis.bono_consulta a
+	join data_praxis.bono_compra b on a.id_bono_compra=b.id_bono_compra
+	join (  select bono_consulta_numero 
+		from gd_esquema.Maestra 
+		where
+		Medico_Dni is not null and --estas condiciones traen los turnos reservados concretados (no hay turnos repetidos)
+		Turno_numero is not null and
+		compra_bono_fecha is null and
+		consulta_sintomas is not null and
+		Bono_Farmacia_Numero is not null and
+		Bono_Consulta_Numero is not null 
+		)c on c.bono_consulta_numero=a.id_bono_consulta
+		) S 
+		
+		ON s.id_bono_consulta = t.id_bono_consulta
         
-WHEN MATCHED THEN
-   UPDATE 
-      SET numero_consulta = s.cantidad;
+	WHEN MATCHED THEN
+	   UPDATE 
+	      SET numero_consulta = s.cantidad;
 
 
 
