@@ -775,7 +775,7 @@ WHEN MATCHED THEN
    UPDATE 
       SET id_receta_medicamento = S.id_receta_medicamento;
       
---ACTUALIZACION DE ESTADO_TURNO (campo id_receta_medicamento)
+--ACTUALIZACION DE ESTADO_TURNO 
 MERGE INTO DATA_PRAXIS.AGENDA T
    USING DATA_PRAXIS.TURNO S 
       ON s.id_agenda = t.id_agenda
