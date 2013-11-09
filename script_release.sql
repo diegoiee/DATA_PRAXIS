@@ -690,9 +690,9 @@ left join data_praxis.profesional e on d.id_persona=e.id_persona
 
 --TURNO(reservas concretadas)
 -------------------------------------
-insert into data_praxis.turno(id_turno,id_afiliado,id_estado_turno)
+insert into data_praxis.turno(id_turno,id_agenda,id_afiliado,id_estado_turno)
 
-select a.turno_numero, f.id_afiliado, 2 --estado activo
+select a.turno_numero,g.id_agenda, f.id_afiliado, 2 --estado activo
 from (
 	select * 
 	from gd_esquema.Maestra
