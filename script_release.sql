@@ -31,12 +31,6 @@ DROP TABLE DATA_PRAXIS.USUARIO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_USUARIO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ESTADO_USUARIO 
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[TURNO]') AND type in (N'U'))
-DROP TABLE DATA_PRAXIS.TURNO 
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[AGENDA]') AND type in (N'U'))
-DROP TABLE DATA_PRAXIS.AGENDA
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[BONO_FARMACIA]') AND type in (N'U'))
 DROP TABLE   DATA_PRAXIS.BONO_FARMACIA
 
@@ -51,6 +45,12 @@ DROP TABLE DATA_PRAXIS.RECETA
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[CONSULTA]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.CONSULTA
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[TURNO]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.TURNO 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[AGENDA]') AND type in (N'U'))
+DROP TABLE DATA_PRAXIS.AGENDA
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[BONO_CONSULTA]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.BONO_CONSULTA
@@ -76,7 +76,6 @@ DROP TABLE DATA_PRAXIS.PROFESIONAL
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[PERSONA]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.PERSONA 
 
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[TIPO_DOCUMENTO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.TIPO_DOCUMENTO 
 
@@ -89,10 +88,8 @@ DROP TABLE DATA_PRAXIS.HORARIO_TURNO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_TURNO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ESTADO_TURNO 
 
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[PLAN_MEDICO]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.PLAN_MEDICO 
-
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_CIVIL]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ESTADO_CIVIL 
@@ -277,18 +274,33 @@ CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
         fecha_impresion DATETIME
 )
 
-CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
-        id_consulta BIGINT identity(1,1) PRIMARY KEY,
-        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
-		id_turno bigint FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
-        horario_llegada time null,
-        sintomas varchar(255) null,
-        diagnostico varchar(255) null
-)
-
 CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
 	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
 	descripcion_medicamento VARCHAR(255)
+)
+
+CREATE TABLE DATA_PRAXIS.AGENDA( 
+		id_agenda BIGINT IDENTITY(1,1) PRIMARY KEY,
+        fecha_turno date not null,
+        id_horario_turno TINYINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.HORARIO_TURNO (id_horario_turno),
+        id_profesional BIGINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.PROFESIONAL (id_profesional),
+        id_especialidad  numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.ESPECIALIDAD (id_especialidad),
+)
+
+CREATE TABLE [DATA_PRAXIS].[TURNO]( 
+        [id_turno] [numeric](18,0) primary key,
+        id_agenda bigint foreign key references data_praxis.agenda(id_agenda),
+        [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
+        [id_estado_turno] [int] null      
+)
+
+CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
+        id_consulta BIGINT identity(1,1) PRIMARY KEY,
+        id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
+		id_turno numeric(18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
+        horario_llegada time null,
+        sintomas varchar(255) null,
+        diagnostico varchar(255) null
 )
 
 CREATE TABLE DATA_PRAXIS.RECETA  (
@@ -312,31 +324,12 @@ CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	id_receta_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA_MEDICAMENTO (id_receta_medicamento)
 )
 
-
-
-
-
-CREATE TABLE [DATA_PRAXIS].[AGENDA]( 
-		id_agenda BIGINT IDENTITY(1,1) PRIMARY KEY,
-        [fecha_turno] [date] not null,
-        [id_horario_turno] [TINYINT] NOT NULL, --FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
-        [id_profesional] [BIGINT] not null, --FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
-        [id_especialidad ] [numeric](18,0) not null, --FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
-)
-
-CREATE TABLE [DATA_PRAXIS].[TURNO]( 
-        [id_turno] [numeric](18,0) primary key,
-        [id_afiliado] [BIGINT], foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
-        [id_estado_turno] [int] null,
-        constraint pk_agenda primary key(fecha_turno,id_horario_turno,id_profesional)
-)
-
 CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
 		id_tipo_cancelacion TINYINT PRIMARY KEY,
 		descripcion_tipo_cancelacion VARCHAR(255) NOT NULL
  )
   
- CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
+/* CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
   [fecha_turno] [DATE] not null,
   [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
    [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
@@ -347,7 +340,7 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
   [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
   [motivo_cancelacion] VARCHAR(255) NOT NULL, 
   constraint pk_turno_cancelado primary key(fecha_turno,id_horario_turno,id_profesional)
-)
+)*/
 
 CREATE INDEX pepito
 ON DATA_PRAXIS.PERSONA(numero_documento)
@@ -678,7 +671,7 @@ WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
 --AGENDA(solo  reserva sin concretar)
 -------------------------------------
-insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_consulta,id_turno,id_afiliado,id_especialidad,id_estado_turno)
+insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_especialidad)
 
 select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, a.Especialidad_Codigo
 from (
@@ -688,7 +681,7 @@ from (
 	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
 	compra_bono_fecha is null and
 	consulta_sintomas is null and
-	Turno_numero not null
+	Turno_numero is not null
 	) a
 
 left join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
@@ -712,12 +705,12 @@ from (
 	Bono_Consulta_Numero is not null
 	) a
 
-join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
-join data_praxis.persona c on c.numero_documento=a.Paciente_Dni 
-join data_praxis.persona d on d.numero_documento=a.Medico_Dni
-join data_praxis.profesional e on d.id_persona=e.id_persona
-join data_praxis.afiliado f on c.id_persona=f.id_persona
-join data_praxis.agenda g on g.id_horario_turno=b.id_horario_turno and g.fecha_turno=CAST(a.turno_fecha AS DATE) and g.id_profesional=e.id_profesional
+left join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
+left join data_praxis.persona c on c.numero_documento=a.Paciente_Dni 
+left join data_praxis.persona d on d.numero_documento=a.Medico_Dni
+left join data_praxis.profesional e on d.id_persona=e.id_persona
+left join data_praxis.afiliado f on c.id_persona=f.id_persona
+left join data_praxis.agenda g on g.id_horario_turno=b.id_horario_turno and g.fecha_turno=CAST(a.turno_fecha AS DATE) and g.id_profesional=e.id_profesional
 
 
 
