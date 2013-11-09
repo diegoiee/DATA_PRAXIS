@@ -775,14 +775,42 @@ WHEN MATCHED THEN
    UPDATE 
       SET id_receta_medicamento = S.id_receta_medicamento;
       
---ACTUALIZACION DE ESTADO_TURNO
+--ACTUALIZACION DE ESTADO_TURNO (campo id_receta_medicamento)
 MERGE INTO DATA_PRAXIS.AGENDA T
    USING DATA_PRAXIS.TURNO S 
       ON s.id_agenda = t.id_agenda
         
 WHEN MATCHED THEN
    UPDATE 
-      SET id_estado_turno = 2;      
+      SET id_estado_turno = 2;
+      
+--ACTUALIZACION NRO CONSULTAS DE CADA AFILIADO
+
+MERGE INTO DATA_PRAXIS.afiliado T
+   USING (select id_afiliado, COUNT(*) as 'cantidad'
+from data_praxis.bono_consulta a
+join data_praxis.bono_compra b on a.id_bono_compra=b.id_bono_compra
+group by id_afiliado ) S 
+      ON s.id_afiliado = t.id_afiliado
+        
+WHEN MATCHED THEN
+   UPDATE 
+      SET numero_consulta = s.cantidad;
+      
+      
+--ACTUALIZACION CAMPO NRO CONSULTA DE CADA BONO
+
+MERGE INTO DATA_PRAXIS.bono_consulta T
+   USING (select b.id_afiliado,a.id_bono_consulta,ROW_NUMbER() OVER (partition by b.id_afiliado ORDER BY b.fecha_compra) as 'cantidad'
+from data_praxis.bono_consulta a
+join data_praxis.bono_compra b on a.id_bono_compra=b.id_bono_compra
+ ) S 
+      ON s.id_bono_consulta = t.id_bono_consulta
+        
+WHEN MATCHED THEN
+   UPDATE 
+      SET numero_consulta = s.cantidad;
+
 
 
 commit tran t1;
