@@ -690,9 +690,9 @@ left join data_praxis.profesional e on d.id_persona=e.id_persona
 
 --TURNO(reservas concretadas)
 -------------------------------------
-insert into data_praxis.turno(id_turno,id_agenda,id_afiliado,id_estado_turno)
+insert into data_praxis.turno(id_turno,id_agenda,id_afiliado)
 
-select a.turno_numero,g.id_agenda, f.id_afiliado, 2 --estado activo
+select a.turno_numero,g.id_agenda, f.id_afiliado --estado activo
 from (
 	select * 
 	from gd_esquema.Maestra
@@ -774,6 +774,15 @@ join DATA_PRAXIS.RECETA_MEDICAMENTO f on e.id_receta=f.id_receta
 WHEN MATCHED THEN
    UPDATE 
       SET id_receta_medicamento = S.id_receta_medicamento;
+      
+--ACTUALIZACION DE ESTADO_TURNO (campo id_receta_medicamento)
+MERGE INTO DATA_PRAXIS.AGENDA T
+   USING DATA_PRAXIS.TURNO S 
+      ON s.id_agenda = t.id_agenda
+        
+WHEN MATCHED THEN
+   UPDATE 
+      SET id_estado_turno = 2;      
 
 
 commit tran t1;
