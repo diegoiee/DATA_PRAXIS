@@ -671,9 +671,9 @@ WHERE Bono_Farmacia_Medicamento IS NOT NULL
 
 --AGENDA(solo  reserva sin concretar)
 -------------------------------------
-insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_especialidad)
+insert into data_praxis.agenda(fecha_turno,id_horario_turno,id_profesional,id_especialidad,id_estado_turno)
 
-select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, a.Especialidad_Codigo
+select a.Turno_Fecha, b.id_horario_turno, e.id_profesional, a.Especialidad_Codigo,1
 from (
 	select * --este select deberia traer solamente los turnos reservados sin concretar
 	from gd_esquema.Maestra GG
