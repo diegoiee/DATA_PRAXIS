@@ -159,7 +159,7 @@ CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
 )
 
 CREATE TABLE DATA_PRAXIS.ROL (
-        id_rol INT PRIMARY KEY,
+        id_rol INT IDENTITY(1,1) PRIMARY KEY,
         nombre_rol VARCHAR(20) NOT NULL,
         id_estado_rol TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
