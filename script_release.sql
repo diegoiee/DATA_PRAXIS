@@ -432,11 +432,11 @@ INSERT INTO DATA_PRAXIS.ESTADO_USUARIO (id_estado_usuario,estado_usuario)
 --ROL -- OK
 ------------
 
-INSERT INTO DATA_PRAXIS.ROL (id_rol, nombre_rol, id_estado_rol)
+INSERT INTO DATA_PRAXIS.ROL (nombre_rol, id_estado_rol)
 	VALUES
- (1,'Afiliado',1),
-(2,'Profesional',1),
-(3,'Administrativo',1)
+ ('Afiliado',1),
+('Profesional',1),
+('Administrativo',1)
 
 INSERT INTO DATA_PRAXIS.FUNCIONALIDAD
 	VALUES 
