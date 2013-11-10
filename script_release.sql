@@ -1,6 +1,9 @@
 begin tran
 
 
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[VISTA_PROFESIONALES]'))
+DROP VIEW [DATA_PRAXIS].[VISTA_PROFESIONALES]
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_ROL]') AND type in (N'U'))
 DROP TABLE DATA_PRAXIS.ESTADO_ROL 
 
@@ -506,7 +509,20 @@ VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concu
 INSERT INTO DATA_PRAXIS.ESTADO_TURNO (id_estado_turno, estado_turno)
 VALUES (1,'DISPONIBLE'), (2,'OTORGADO')
 
+COMMIT TRAN T1
 
+
+BEGIN TRAN T2
+CREATE VIEW DATA_PRAXIS.VISTA_PROFESIONALES AS 
+SELECT PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', PROF.matricula
+FROM DATA_PRAXIS.PERSONA PERSONA
+JOIN DATA_PRAXIS.PROFESIONAL PROF ON PERSONA.id_persona = PROF.id_persona
+LEFT JOIN DATA_PRAXIS.TIPO_DOCUMENTO TD ON PERSONA.id_tipo_documento = TD.id_tipo_documento
+LEFT JOIN DATA_PRAXIS.SEXO SX ON PERSONA.id_sexo = SX.id_sexo
+
+COMMIT TRAN T2
+
+BEGIN TRAN T3
 --//////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////////////////////////////////////////////////////////////
 --/////////////////////////////      MIGRACION     ///////////////////////////////////
@@ -825,4 +841,5 @@ MERGE INTO DATA_PRAXIS.bono_consulta T
 
 
 
-commit tran t1;
+commit tran t3;
+
