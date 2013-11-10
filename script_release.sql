@@ -456,6 +456,13 @@ INSERT INTO DATA_PRAXIS.USUARIO (  nombre_usuario,clave_usuario,id_estado_usuari
   	VALUES ('Admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1)
 
 
+INSERT INTO DATA_PRAXIS.USUARIO_ROL
+	VALUES 
+	(1,1),
+	(1,2),
+	(1,3)
+	
+
 
 --HORARIO_TURNO --OK
 --------------------
@@ -529,7 +536,7 @@ COMMIT TRAN T1
 BEGIN TRAN T2
 go
 CREATE VIEW DATA_PRAXIS.VISTA_PROFESIONALES AS 
-SELECT PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', PROF.matricula
+SELECT PROF.id_profesional,PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', PROF.matricula
 FROM DATA_PRAXIS.PERSONA PERSONA
 JOIN DATA_PRAXIS.PROFESIONAL PROF ON PERSONA.id_persona = PROF.id_persona
 LEFT JOIN DATA_PRAXIS.TIPO_DOCUMENTO TD ON PERSONA.id_tipo_documento = TD.id_tipo_documento
