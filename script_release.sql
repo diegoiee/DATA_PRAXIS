@@ -418,7 +418,7 @@ INSERT INTO DATA_PRAXIS.SEXO (id_sexo, descripcion_sexo)
 --------------------
 
 INSERT INTO DATA_PRAXIS.ESTADO_ROL (id_estado_rol,estado_rol)
-	VALUES (0,'INACTIVO'),(1,'ACTIVO')
+	VALUES (0,'INACTIVO'),(1,'ACTIVO'),(2,'ELIMINADO')
 
 --ESTADO USUARIO
 --------------------
