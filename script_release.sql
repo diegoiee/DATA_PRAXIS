@@ -636,7 +636,7 @@ where Especialidad_Codigo is not null
 -------------
 INSERT INTO DATA_PRAXIS.AFILIADO                                 
 SELECT
-(ROW_NUMBER()OVER(order by Paciente_Dni))*100,
+((ROW_NUMBER()OVER(order by Paciente_Dni))*100)+1,
 b.id_persona,
 a.Plan_Med_Codigo,
 0,
