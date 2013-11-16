@@ -1,5 +1,66 @@
 begin tran
 
+IF OBJECT_ID('DATA_PRAXIS.[MIGRAR_AFILIADO]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_AFILIADO]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_AFILIADO_ACTUALIZACION]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_AFILIADO_ACTUALIZACION]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_AGENDA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_AGENDA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_BONO_COMPRA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_BONO_COMPRA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_BONO_CONSULTA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_BONO_CONSULTA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_BONO_CONSULTA_ACTUALIZACION]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_BONO_CONSULTA_ACTUALIZACION]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_BONO_FARMACIA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_BONO_FARMACIA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_BONO_FARMACIA_ACTUALIZACION]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_BONO_FARMACIA_ACTUALIZACION]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_CONSULTA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_CONSULTA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_ESPECIALIDAD]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_ESPECIALIDAD]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_ESTADO_TURNO_ACTUALIZACION]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_ESTADO_TURNO_ACTUALIZACION]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_MEDICAMENTOS]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_MEDICAMENTOS]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_PERSONA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_PERSONA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_PLAN_MEDICO]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_PLAN_MEDICO]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_PROFESIONAL]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_PROFESIONAL]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_PROFESIONAL_ESPECIALIDAD]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_PROFESIONAL_ESPECIALIDAD]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_RECETA]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_RECETA]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_RECETA_MEDICAMENTO]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_RECETA_MEDICAMENTO]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_TIPO_ESPECIALIDAD]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_TIPO_ESPECIALIDAD]
+
+IF OBJECT_ID('[DATA_PRAXIS].[MIGRAR_TURNO]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[MIGRAR_TURNO]
+
+
 
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[VISTA_PROFESIONALES]'))
 DROP VIEW [DATA_PRAXIS].[VISTA_PROFESIONALES]
@@ -98,7 +159,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS
 DROP TABLE DATA_PRAXIS.PLAN_MEDICO 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DATA_PRAXIS].[ESTADO_CIVIL]') AND type in (N'U'))
-DROP TABLE DATA_PRAXIS.ESTADO_CIVIL 
+DROP TABLE DATA_PRAXIS.ESTADO_CIVIL
 
 
 
@@ -555,19 +616,20 @@ SELECT a.id_rol, a.nombre_rol, b.estado_rol
 go
 COMMIT TRAN T2
 
-BEGIN TRAN T3
---//////////////////////////////////////////////////////////////////////////////////////
---/////////////////////////////////////////////////////////////////////////////////////
---/////////////////////////////      MIGRACION     ///////////////////////////////////
---///////////////////////////////////////////////////////////////////////////////////
---//////////////////////////////////////////////////////////////////////////////////
-/*
-En general el problema es repetir varias veces la consulta de la tabla maestra.
-Estaria bueno poder en una misma consulta migrar varias tablas, 
-recorriendo una unica vez todas las filas y segun que condicion cumpla cada fila hacer un insert a una u otra tabla
-*/
 
 
+
+--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--////////////////////////////////       CREAR PROCEDIMIENTOS       ////////////////////////////////////////////////
+--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_PERSONA
+	
+AS
+BEGIN 
 
 --PERSONA --OK
 -------------- 
@@ -597,6 +659,15 @@ NULL,  --id_sexo
 NULL --id_estado_civil
 FROM gd_esquema.Maestra
 
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_PLAN_MEDICO
+	
+AS
+BEGIN 
+
 --PLAN_MEDICO--
 -------------
 
@@ -610,6 +681,14 @@ plan_med_precio_bono_farmacia,
 NULL
 FROM gd_esquema.Maestra
 
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_TIPO_ESPECIALIDAD
+	
+AS
+BEGIN 
 
 --TIPO_ESPECIALIDAD --OK
 -------------
@@ -619,6 +698,16 @@ Tipo_Especialidad_Codigo,
 Tipo_Especialidad_Descripcion
 FROM gd_esquema.Maestra 
 where Tipo_Especialidad_Codigo is not null
+
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_ESPECIALIDAD
+	
+AS
+BEGIN 
+
 
 --ESPECIALIDAD --OK
 -------------
@@ -630,9 +719,16 @@ Especialidad_Descripcion
 FROM gd_esquema.Maestra 
 where Especialidad_Codigo is not null
 
+END
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_AFILIADO
+	
+AS
+BEGIN 
 
 
---AFILIADO   --NO FUNCIONA, REVISAR
+--AFILIADO   
 -------------
 INSERT INTO DATA_PRAXIS.AFILIADO                                 
 SELECT
@@ -644,6 +740,15 @@ NULL
 FROM (SELECT distinct Paciente_Dni,Plan_Med_Codigo FROM gd_esquema.Maestra WHERE Paciente_Dni is not null) a
 join data_praxis.PERSONA b on a.paciente_dni=b.numero_documento
 
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_PROFESIONAL
+	
+AS
+BEGIN 
+
 --PROFESIONAL --OK
 -------------
 INSERT INTO DATA_PRAXIS.PROFESIONAL
@@ -654,8 +759,14 @@ NULL
 FROM (SELECT distinct Medico_Dni FROM gd_esquema.Maestra WHERE Medico_Dni is not null) a
 join data_praxis.PERSONA b on a.medico_dni=b.numero_documento
 
+END
 
 
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_PROFESIONAL_ESPECIALIDAD
+	
+AS
+BEGIN 
 
 --MEDICO_ESPECIALIDAD --OK
 -------------------------
@@ -668,8 +779,13 @@ WHERE id_persona=(SELECT aux.id_persona FROM DATA_PRAXIS.PERSONA aux where aux.n
 FROM
 (SELECT DISTINCT Medico_Dni, Especialidad_Codigo FROM gd_esquema.Maestra WHERE Medico_Dni is not null) asd
 
+END
 
-
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_BONO_COMPRA
+	
+AS
+BEGIN 
 
 --BONO_COMPRA --OK
 -------------------------
@@ -682,7 +798,13 @@ JOIN DATA_PRAXIS.AFILIADO A ON  A.id_persona = P.id_persona
 WHERE M.Compra_Bono_Fecha IS NOT NULL 
 AND (BONO_CONSULTA_NUMERO IS NOT NULL or BONO_FARMACIA_NUMERO is not null)
 
+END
 
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_BONO_CONSULTA
+	
+AS
+BEGIN 
 
 --BONO_CONSULTA --OK
 -------------------------
@@ -695,6 +817,16 @@ JOIN DATA_PRAXIS.AFILIADO C ON B.ID_PERSONA = C.ID_PERSONA
 JOIN DATA_PRAXIS.BONO_COMPRA  D ON C.ID_AFILIADO = D.ID_AFILIADO AND D.fecha_compra = A.COMPRA_BONO_FECHA
 JOIN DATA_PRAXIS.PLAN_MEDICO E ON E.id_plan_medico = C.id_plan_medico
 WHERE A.Bono_Consulta_Numero IS NOT NULL
+
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_BONO_FARMACIA
+	
+AS
+BEGIN 
+
 
 
 --BONO_FARMACIA --OK
@@ -709,6 +841,14 @@ JOIN DATA_PRAXIS.BONO_COMPRA  D ON C.ID_AFILIADO = D.ID_AFILIADO AND D.fecha_com
 JOIN DATA_PRAXIS.PLAN_MEDICO E ON E.id_plan_medico = C.id_plan_medico
 WHERE A.Bono_farmacia_Numero IS NOT NULL
 
+END
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_MEDICAMENTOS
+	
+AS
+BEGIN 
+
 
 --MEDICAMENTOS
 ---------------
@@ -717,6 +857,14 @@ INSERT INTO DATA_PRAXIS.MEDICAMENTO (descripcion_medicamento)
 SELECT  DISTINCT Bono_Farmacia_Medicamento
 FROM  gd_esquema.Maestra 
 WHERE Bono_Farmacia_Medicamento IS NOT NULL
+
+END
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_AGENDA
+	
+AS
+BEGIN 
 
 --AGENDA(solo  reserva sin concretar)
 -------------------------------------
@@ -736,6 +884,14 @@ from (
 left join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
 left join data_praxis.persona d on d.numero_documento=a.Medico_Dni
 left join data_praxis.profesional e on d.id_persona=e.id_persona
+
+END
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_TURNO
+	
+AS
+BEGIN 
 
 --TURNO(reservas concretadas)
 -------------------------------------
@@ -762,7 +918,13 @@ left join data_praxis.afiliado f on c.id_persona=f.id_persona
 left join data_praxis.agenda g on g.id_horario_turno=b.id_horario_turno and g.fecha_turno=CAST(a.turno_fecha AS DATE) and g.id_profesional=e.id_profesional
 
 
+END
 
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_CONSULTA
+	
+AS
+BEGIN 
 
 --CONSULTA
 -----------
@@ -789,6 +951,14 @@ from (
 
 join data_praxis.turno b on b.id_turno=a.turno_numero
 
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_RECETA
+	
+AS
+BEGIN 
 
 --RECETA
 -------------
@@ -796,6 +966,15 @@ join data_praxis.turno b on b.id_turno=a.turno_numero
 INSERT INTO DATA_PRAXIS.RECETA  (id_consulta)
 SELECT   C.id_consulta
 FROM DATA_PRAXIS.CONSULTA C
+
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_RECETA_MEDICAMENTO
+	
+AS
+BEGIN 
 
 --RECETA_MEDICAMENTO
 
@@ -805,6 +984,15 @@ join DATA_PRAXIS.MEDICAMENTO b on a.Bono_Farmacia_Medicamento=b.descripcion_medi
 join DATA_PRAXIS.TURNO c on a.Turno_Numero=c.id_turno
 join DATA_PRAXIS.CONSULTA d on c.id_turno=d.id_turno
 join DATA_PRAXIS.RECETA e on e.id_consulta=d.id_consulta
+
+END
+GO
+
+
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_BONO_FARMACIA_ACTUALIZACION
+	
+AS
+BEGIN 
 
 --ACTUALIZACION DE BONO FARMACIA (campo id_receta_medicamento)
 MERGE INTO DATA_PRAXIS.BONO_FARMACIA T
@@ -823,16 +1011,30 @@ join DATA_PRAXIS.RECETA_MEDICAMENTO f on e.id_receta=f.id_receta
 WHEN MATCHED THEN
    UPDATE 
       SET id_receta_medicamento = S.id_receta_medicamento;
-      
+
+END
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_ESTADO_TURNO_ACTUALIZACION	
+AS
+BEGIN 
+
 --ACTUALIZACION DE ESTADO_TURNO 
 MERGE INTO DATA_PRAXIS.AGENDA T
    USING DATA_PRAXIS.TURNO S 
       ON s.id_agenda = t.id_agenda
-        
+     
 WHEN MATCHED THEN
    UPDATE 
       SET id_estado_turno = 2;
-      
+END
+
+
+GO
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_AFILIADO_ACTUALIZACION	
+AS
+BEGIN 
+
 --ACTUALIZACION NRO CONSULTAS DE CADA AFILIADO
 
 MERGE INTO DATA_PRAXIS.afiliado T
@@ -845,8 +1047,18 @@ group by id_afiliado ) S
 WHEN MATCHED THEN
    UPDATE 
       SET numero_consulta = s.cantidad;
-      
-      
+
+
+END
+
+
+GO
+
+CREATE PROCEDURE DATA_PRAXIS.MIGRAR_BONO_CONSULTA_ACTUALIZACION	
+AS
+BEGIN 
+
+
 --ACTUALIZACION CAMPO NRO CONSULTA DE CADA BONO
 
 MERGE INTO DATA_PRAXIS.bono_consulta T
@@ -873,6 +1085,27 @@ MERGE INTO DATA_PRAXIS.bono_consulta T
 	      SET numero_consulta = s.cantidad;
 
 
+END
+GO
 
-commit tran t3;
 
+EXEC DATA_PRAXIS.MIGRAR_PERSONA
+EXEC DATA_PRAXIS.MIGRAR_PLAN_MEDICO	
+EXEC DATA_PRAXIS.MIGRAR_TIPO_ESPECIALIDAD
+EXEC DATA_PRAXIS.MIGRAR_ESPECIALIDAD
+EXEC DATA_PRAXIS.MIGRAR_AFILIADO
+EXEC DATA_PRAXIS.MIGRAR_PROFESIONAL
+EXEC DATA_PRAXIS.MIGRAR_PROFESIONAL_ESPECIALIDAD	
+EXEC DATA_PRAXIS.MIGRAR_BONO_COMPRA
+EXEC DATA_PRAXIS.MIGRAR_BONO_CONSULTA
+EXEC DATA_PRAXIS.MIGRAR_BONO_FARMACIA
+EXEC DATA_PRAXIS.MIGRAR_MEDICAMENTOS
+EXEC DATA_PRAXIS.MIGRAR_AGENDA
+EXEC DATA_PRAXIS.MIGRAR_TURNO
+EXEC DATA_PRAXIS.MIGRAR_CONSULTA
+EXEC DATA_PRAXIS.MIGRAR_RECETA
+EXEC DATA_PRAXIS.MIGRAR_RECETA_MEDICAMENTO
+EXEC DATA_PRAXIS.MIGRAR_BONO_FARMACIA_ACTUALIZACION
+EXEC DATA_PRAXIS.MIGRAR_ESTADO_TURNO_ACTUALIZACION	
+EXEC DATA_PRAXIS.MIGRAR_AFILIADO_ACTUALIZACION	
+EXEC DATA_PRAXIS.MIGRAR_BONO_CONSULTA_ACTUALIZACION	
