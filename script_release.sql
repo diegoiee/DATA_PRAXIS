@@ -915,12 +915,10 @@ from (
 	select * 
 	from gd_esquema.Maestra
 	where
-	Medico_Dni is not null and --estas condiciones traen los turnos reservados concretados (no hay turnos repetidos)
-	Turno_numero is not null and
+	Medico_Dni is not null and --estas condiciones traen los turnos reservados sin concretar (no hay turnos repetidos)
 	compra_bono_fecha is null and
-	consulta_sintomas is not null and
-	Bono_Farmacia_Numero is not null and
-	Bono_Consulta_Numero is not null
+	consulta_sintomas is null and
+	Turno_numero is not null
 	) a
 
 left join data_praxis.horario_turno b on b.horario_turno=CAST(a.turno_fecha as TIME)
