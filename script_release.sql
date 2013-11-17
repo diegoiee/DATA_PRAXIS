@@ -614,6 +614,16 @@ SELECT a.id_rol, a.nombre_rol, b.estado_rol
             FROM DATA_PRAXIS.ROL a
             JOIN DATA_PRAXIS.ESTADO_ROL b ON b.id_estado_rol=a.id_estado_rol
 go
+
+CREATE VIEW DATA_PRAXIS.VISTA_AFILIADO AS 
+SELECT AFIL.id_afiliado,PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', EC.descripcion_estado_civil as 'estado civil', PERSONA.cantidad_familiares_a_cargo,PM.desc_plan_medico as 'plan medico'
+FROM DATA_PRAXIS.PERSONA PERSONA
+JOIN DATA_PRAXIS.AFILIADO AFIL ON PERSONA.id_persona = AFIL.id_persona
+LEFT JOIN DATA_PRAXIS.TIPO_DOCUMENTO TD ON PERSONA.id_tipo_documento = TD.id_tipo_documento
+LEFT JOIN DATA_PRAXIS.SEXO SX ON PERSONA.id_sexo = SX.id_sexo
+LEFT JOIN DATA_PRAXIS.ESTADO_CIVIL EC ON PERSONA.id_estado_civil=EC.id_estado_civil
+LEFT JOIN DATA_PRAXIS.PLAN_MEDICO PM ON AFIL.id_plan_medico=PM.id_plan_medico
+go
 COMMIT TRAN T2
 
 
