@@ -399,7 +399,7 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
 		descripcion_tipo_cancelacion VARCHAR(255) NOT NULL
  )
   
-/* CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
+ CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
   [fecha_turno] [DATE] not null,
   [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
    [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
@@ -410,7 +410,7 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
   [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
   [motivo_cancelacion] VARCHAR(255) NOT NULL, 
   constraint pk_turno_cancelado primary key(fecha_turno,id_horario_turno,id_profesional)
-)*/
+)
 
 CREATE INDEX pepito
 ON DATA_PRAXIS.PERSONA(numero_documento)
@@ -462,7 +462,12 @@ GO
 --/////////////////////////////////////////////////////////////////////////////////////
 --///////////////////////    Llenado, nuevas tablas    ///////////////////////////
 --///////////////////////////////////////////////////////////////////////////////////
---//////////////////////////////////////////////////////////////////////////////////
+--//////////////////////
+
+--TIPO_CANCELACIONES
+
+ INSERT INTO DATA_PRAXIS.TIPO_CANCELACION (id_tipo_cancelacion,descripcion_tipo_cancelacion)
+	  VALUES (1,'Profesional'), (2,'Afiliado')  
 
 --TIPO_DNI --OK
 -------------- 
