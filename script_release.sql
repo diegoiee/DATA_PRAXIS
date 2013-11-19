@@ -286,6 +286,7 @@ CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 
 CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
         [id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
+	id_afiliado bigint not null foreign key references data_praxis.afiliado(id_afiliado),
         [fecha_modificacion] [datetime] not null,
         [id_plan_viejo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
         [id_plan_nuevo] [numeric](18,0) NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[PLAN_MEDICO] (id_plan_medico),
