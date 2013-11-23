@@ -954,9 +954,9 @@ Pregunta1: En la tabla maestra, un turno concretado tiene tambien otro registro 
 Pregunta2: No conviene usar id_turno en vez de id_consulta? total id_consulta para que sirve, que sentido tiene que exista? complicar la migracion?
 */
 
-insert into data_praxis.consulta(id_bono_consulta,id_turno,horario_llegada,sintomas,diagnostico)
+insert into data_praxis.consulta(id_bono_consulta,id_turno,horario_llegada,sintomas,diagnostico,estado_consulta)
 
-select a.bono_consulta_numero, b.id_turno, NULL, a.consulta_sintomas,a.consulta_enfermedades --estado activo
+select a.bono_consulta_numero, b.id_turno, NULL, a.consulta_sintomas,a.consulta_enfermedades,'1' --estado activo
 from (
 	select * 
 	from gd_esquema.Maestra
