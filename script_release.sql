@@ -284,6 +284,14 @@ CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 	fecha_asiento_precio_bono_farmacia DATETIME
 )
 
+CREATE TABLE DATA_PRAXIS.AFILIADO ( --OK
+        id_afiliado BIGINT primary key,
+        id_persona BIGINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PERSONA (id_persona),
+        id_plan_medico numeric(18,0) NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PLAN_MEDICO (id_plan_medico), --plan_med_codigo
+        numero_consulta int  DEFAULT 0,
+        fecha_baja datetime DEFAULT NULL
+)
+
 CREATE TABLE [DATA_PRAXIS].[CAMBIO_PLAN_HIST](--OK
         [id_usuario] [bigint] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[USUARIO](id_usuario),
 	id_afiliado bigint not null foreign key references data_praxis.afiliado(id_afiliado),
@@ -308,13 +316,7 @@ CREATE TABLE DATA_PRAXIS.ESPECIALIDAD( --OK
 )
 
 
-CREATE TABLE DATA_PRAXIS.AFILIADO ( --OK
-        id_afiliado BIGINT primary key,
-        id_persona BIGINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PERSONA (id_persona),
-        id_plan_medico numeric(18,0) NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.PLAN_MEDICO (id_plan_medico), --plan_med_codigo
-        numero_consulta int  DEFAULT 0,
-        fecha_baja datetime DEFAULT NULL
-)
+
 
 
 CREATE TABLE DATA_PRAXIS.PROFESIONAL ( --OK
