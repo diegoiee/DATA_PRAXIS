@@ -368,8 +368,9 @@ CREATE TABLE [DATA_PRAXIS].[TURNO](
 CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
         id_consulta BIGINT identity(1,1) PRIMARY KEY,
         id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
-		id_turno numeric(18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
+	id_turno numeric(18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
         horario_llegada time null,
+        estado_consulta tinyint null, --0 si el medico todavia no cargo los resultados, 1 si la consulta se realizo, 2 si la consulta no se realizo
         sintomas varchar(255) null,
         diagnostico varchar(255) null
 )
