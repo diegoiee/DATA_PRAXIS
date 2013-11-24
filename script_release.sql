@@ -1,5 +1,9 @@
 begin tran
 
+
+IF OBJECT_ID('DATA_PRAXIS.[CANCELAR_TURNO_Y_LOGUEAR]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[CANCELAR_TURNO_Y_LOGUEAR]
+
 IF OBJECT_ID('DATA_PRAXIS.[MIGRAR_AFILIADO]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].[MIGRAR_AFILIADO]
 
@@ -647,6 +651,32 @@ COMMIT TRAN T2
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+CREATE  PROCEDURE  [DATA_PRAXIS].[CANCELAR_TURNO_Y_LOGUEAR]
+   @id_turno NUMERIC(18,0), 
+   @tipo_cancelacion  TINYINT,
+   @motivo_cancelacion nvarchar(255) 
+AS 
+BEGIN TRAN T1
+   UPDATE DATA_PRAXIS.AGENDA
+   SET id_estado_turno = 1
+  FROM  DATA_PRAXIS.AGENDA A
+  JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
+   WHERE id_turno = @id_turno
+ 
+  INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST
+  (fecha_turno, id_horario_turno, id_profesional, id_consulta, id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion) 
+ 
+ SELECT A.fecha_turno, A.id_horario_turno,A.id_profesional,NULL, @id_turno, T.id_afiliado,A.id_especialidad, @tipo_cancelacion, @motivo_cancelacion
+ FROM DATA_PRAXIS.AGENDA A
+ JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda 
+ WHERE id_turno = @id_turno
+
+DELETE FROM DATA_PRAXIS.TURNO
+WHERE id_turno = @id_turno  
+
+COMMIT TRAN T1
+
+
 GO
 CREATE PROCEDURE DATA_PRAXIS.MIGRAR_PERSONA
 	
