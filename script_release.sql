@@ -716,10 +716,7 @@ BEGIN
 
 begin tran t3
 
-UPDATE DATA_PRAXIS.AGENDA 
-SET id_estado_turno = 3
-WHERE fecha_turno = @FECHA1 AND
-			  id_estado_turno <> 3
+
 
 
 INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
@@ -729,6 +726,11 @@ SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado,
 	 where A.id_profesional = @ID_PROFESIONAL AND
 				A.fecha_turno = @FECHA1 AND
 				A.id_estado_turno <> 3
+				
+UPDATE DATA_PRAXIS.AGENDA 
+SET id_estado_turno = 3
+WHERE fecha_turno = @FECHA1 AND
+id_estado_turno <> 3
 
 DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
     SELECT  id_agenda 
@@ -752,7 +754,8 @@ SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado,
 	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
 	 where A.id_profesional=@ID_PROFESIONAL AND
 				A.fecha_turno >=@FECHA1  and
-				A.fecha_turno <= @FECHA2
+				A.fecha_turno <= @FECHA2  AND
+				id_estado_turno <> 3
 
 
 DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
@@ -768,7 +771,8 @@ DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
 UPDATE DATA_PRAXIS.AGENDA 
 SET id_estado_turno = 3
 WHERE fecha_turno >= @FECHA1 and
-			  fecha_turno <= @FECHA2
+			  fecha_turno <= @FECHA2  AND
+id_estado_turno <> 3
 
 
 commit tran t4
