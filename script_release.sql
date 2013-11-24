@@ -1,6 +1,9 @@
 begin tran
 
 
+IF OBJECT_ID('DATA_PRAXIS.[TRAER_TURNOS_DE_AFILIADO]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].[TRAER_TURNOS_DE_AFILIADO]
+
 IF OBJECT_ID('DATA_PRAXIS.[CANCELAR_TURNO_Y_LOGUEAR]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].[CANCELAR_TURNO_Y_LOGUEAR]
 
@@ -651,6 +654,25 @@ COMMIT TRAN T2
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CREATE PROCEDURE [DATA_PRAXIS].[TRAER_TURNOS_DE_AFILIADO]
+@ID_AFILIADO BIGINT
+AS
+BEGIN
+SELECT * FROM (
+SELECT T.id_turno, A.fecha_turno, H.horario_turno, PE.apellido, PE.nombre, E.descripcion_especialidad, TE.descripcion_tipo_especialidad
+                                   FROM DATA_PRAXIS.TURNO T
+                                   JOIN DATA_PRAXIS.AGENDA A ON T.id_agenda= A.id_agenda
+                                   JOIN DATA_PRAXIS.HORARIO_TURNO H ON A.id_horario_turno = H.id_horario_turno
+                                   JOIN DATA_PRAXIS.PROFESIONAL PR ON A.id_profesional = PR.id_profesional
+                                   JOIN DATA_PRAXIS.PERSONA PE ON PE.id_persona = PR.id_persona
+                                   JOIN DATA_PRAXIS.ESPECIALIDAD E ON A.id_especialidad = E.id_especialidad
+                                   JOIN DATA_PRAXIS.TIPO_ESPECIALIDAD TE ON E.id_tipo_especialidad = TE.id_tipo_especialidad
+                                   WHERE T.id_afiliado = @ID_AFILIADO
+) 
+WHERE id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
+END  
+
 CREATE  PROCEDURE  [DATA_PRAXIS].[CANCELAR_TURNO_Y_LOGUEAR]
    @id_turno NUMERIC(18,0), 
    @tipo_cancelacion  TINYINT,
