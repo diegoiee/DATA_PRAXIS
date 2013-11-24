@@ -613,7 +613,7 @@ VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concu
 -------------------
 
 INSERT INTO DATA_PRAXIS.ESTADO_TURNO (id_estado_turno, estado_turno)
-VALUES (1,'DISPONIBLE'), (2,'OTORGADO')
+VALUES (1,'DISPONIBLE'), (2,'OTORGADO'),(3,'CANCELADO')
 
 COMMIT TRAN T1
 
@@ -698,6 +698,83 @@ DELETE FROM DATA_PRAXIS.TURNO
 WHERE id_turno = @id_turno  
 
 COMMIT TRAN T1
+
+
+go
+
+CREATE PROCEDURE [DATA_PRAXIS].[CANCELAR_TURNOS_POR_PROFESIONAL]
+@FECHA1 DATE ,
+@FECHA2 DATE,
+@MOTIVO VARCHAR(255),
+@ID_PROFESIONAL BIGINT 
+AS
+BEGIN
+
+IF @FECHA2 IS NULL
+
+BEGIN
+
+begin tran t3
+
+UPDATE DATA_PRAXIS.AGENDA 
+SET id_estado_turno = 3
+WHERE fecha_turno = @FECHA1 AND
+			  id_estado_turno <> 3
+
+
+INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
+SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado, A.id_especialidad, 1,@MOTIVO
+	FROM DATA_PRAXIS.AGENDA A 
+	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
+	 where A.id_profesional = @ID_PROFESIONAL AND
+				A.fecha_turno = @FECHA1 AND
+				A.id_estado_turno <> 3
+
+DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
+    SELECT  id_agenda 
+	FROM DATA_PRAXIS.AGENDA A 
+	 where A.id_profesional=@ID_PROFESIONAL AND
+				A.fecha_turno =@FECHA1 
+				)
+
+commit tran t3
+
+END
+ELSE
+BEGIN
+
+begin tran t4
+
+
+INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
+SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado, A.id_especialidad, 1,@MOTIVO
+	FROM DATA_PRAXIS.AGENDA A 
+	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
+	 where A.id_profesional=@ID_PROFESIONAL AND
+				A.fecha_turno >=@FECHA1  and
+				A.fecha_turno <= @FECHA2
+
+
+DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
+    SELECT  A.id_agenda 
+	FROM DATA_PRAXIS.AGENDA A 
+	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
+	WHERE A.id_profesional=@ID_PROFESIONAL AND
+				A.fecha_turno >= @FECHA1 AND
+				A.fecha_turno <= @FECHA2 AND 
+				 T.id_turno IN (SELECT id_turno	FROM DATA_PRAXIS.CONSULTA)
+)
+
+UPDATE DATA_PRAXIS.AGENDA 
+SET id_estado_turno = 3
+WHERE fecha_turno >= @FECHA1 and
+			  fecha_turno <= @FECHA2
+
+
+commit tran t4
+END
+END
+
 
 
 GO
