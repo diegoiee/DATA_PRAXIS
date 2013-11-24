@@ -669,8 +669,8 @@ SELECT T.id_turno, A.fecha_turno, H.horario_turno, PE.apellido, PE.nombre, E.des
                                    JOIN DATA_PRAXIS.ESPECIALIDAD E ON A.id_especialidad = E.id_especialidad
                                    JOIN DATA_PRAXIS.TIPO_ESPECIALIDAD TE ON E.id_tipo_especialidad = TE.id_tipo_especialidad
                                    WHERE T.id_afiliado = @ID_AFILIADO
-) 
-WHERE id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
+) as alias
+WHERE alias.id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
 END  
 
 CREATE  PROCEDURE  [DATA_PRAXIS].[CANCELAR_TURNO_Y_LOGUEAR]
