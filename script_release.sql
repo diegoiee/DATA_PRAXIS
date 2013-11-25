@@ -392,19 +392,17 @@ CREATE TABLE DATA_PRAXIS.RECETA  (
 )
 
 CREATE TABLE DATA_PRAXIS.RECETA_MEDICAMENTO  (
-	id_receta_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
 	id_receta BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
 	id_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
+	id_bono_farmacia BIGINT FOREIGN KEY references DATA_PRAXIS.BONO_FARMACIA (id_bono_farmacia),
 	cantidad_medicamento tinyint not null default 1
 )
 
 CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	id_bono_farmacia numeric(18,0) primary key,
-	--id_receta bigint FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
 	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
 	precio_compra numeric(18,2) null,
-	fecha_impresion datetime,
-	id_receta_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA_MEDICAMENTO (id_receta_medicamento)
+	fecha_impresion datetime
 )
 
 CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
@@ -425,7 +423,7 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
   constraint pk_turno_cancelado primary key(fecha_turno,id_horario_turno,id_profesional)
 )
 
-CREATE INDEX pepito
+CREATE INDEX IX_PERSONA_numero_documento
 ON DATA_PRAXIS.PERSONA(numero_documento)
 
 GO
