@@ -517,7 +517,7 @@ INSERT INTO DATA_PRAXIS.ESTADO_USUARIO (id_estado_usuario,estado_usuario)
 
 INSERT INTO DATA_PRAXIS.ROL (nombre_rol, id_estado_rol)
 	VALUES
- ('Afiliado',1),
+('Afiliado',1),
 ('Profesional',1),
 ('Administrativo',1),
 ('Administrador General',1)
@@ -538,13 +538,31 @@ INSERT INTO DATA_PRAXIS.FUNCIONALIDAD
 	
 INSERT INTO DATA_PRAXIS.ROL_FUNCIONALIDAD
 	VALUES 
-	(1,1),
-	(1,2),
-	(2,1),
-	(3,2)
-	
-	
-	
+	(1,4),
+	(1,5),
+	(1,10),
+	(2,3),
+	(2,7),
+	(2,8),
+	(2,10),
+	(3,1),
+	(3,2),
+	(3,3),
+	(3,4),
+	(3,5),
+	(3,6),
+	(3,10),
+	(3,9),
+	(4,1),
+	(4,2),
+	(4,3),
+	(4,4),
+	(4,5),
+	(4,6),
+	(4,7),
+	(4,8),
+	(4,9),
+	(4,10)
 	
 -- INSERT USUARIO ADMINISTRADOR
 ------------------------------------------
