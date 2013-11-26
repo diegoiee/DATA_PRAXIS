@@ -533,7 +533,8 @@ INSERT INTO DATA_PRAXIS.FUNCIONALIDAD
 	('RegistrarResultadoAtMedica',1),
 	('RecetaMedica',1),
 	('Estadisticas',1),
-	('CancelarAtencionMedica',1)
+	('CancelarAtencionMedica',1),
+	('ABMRol',1)
 
 	
 INSERT INTO DATA_PRAXIS.ROL_FUNCIONALIDAD
@@ -562,20 +563,26 @@ INSERT INTO DATA_PRAXIS.ROL_FUNCIONALIDAD
 	(4,7),
 	(4,8),
 	(4,9),
-	(4,10)
+	(4,10),
+	(4,11)
 	
 -- INSERT USUARIO ADMINISTRADOR
 ------------------------------------------
 
 INSERT INTO DATA_PRAXIS.USUARIO (  nombre_usuario,clave_usuario,id_estado_usuario)
-  	VALUES ('Admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1)
+  	VALUES ('Admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1),
+  	('test','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1)
 
 
 INSERT INTO DATA_PRAXIS.USUARIO_ROL
 	VALUES 
-	(1,1),
-	(1,2),
-	(1,3)
+	(1,4),
+	(2,1),
+	(2,2),
+	(2,3),
+	(2,4)
+
+
 	
 
 
