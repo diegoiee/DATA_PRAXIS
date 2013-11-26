@@ -1289,20 +1289,20 @@ BEGIN
 begin tran
 
 INSERT INTO DATA_PRAXIS.USUARIO(id_persona,nombre_usuario,clave_usuario,intentos_ingreso,id_estado_usuario)
-SELECT id_persona,numero_documento,'688787d8ff144c502c7f5cffaafe2cc588d86079f9de88304c26b0cb99ce91c6',0,1
+SELECT id_persona,numero_documento,'688787d8ff144c502c7f5cffaafe2cc588d86079f9de88304c26b0cb99ce91c6',0,1 --pass asd
 FROM DATA_PRAXIS.PERSONA
 
 INSERT INTO DATA_PRAXIS.USUARIO_ROL(id_usuario,id_rol)
 SELECT c.id_usuario, 1
 FROM DATA_PRAXIS.PERSONA a
 JOIN DATA_PRAXIS.AFILIADO b on a.id_persona=b.id_persona
-JOIN DATA_PRAXIS.USUARIO c on a.numero_documento=c.nombre_usuario
+JOIN DATA_PRAXIS.USUARIO c on CONVERT(VARCHAR,a.numero_documento)=c.nombre_usuario
 
 INSERT INTO DATA_PRAXIS.USUARIO_ROL(id_usuario,id_rol)
 SELECT c.id_usuario, 2
 FROM DATA_PRAXIS.PERSONA a
 JOIN DATA_PRAXIS.PROFESIONAL b on a.id_persona=b.id_persona
-JOIN DATA_PRAXIS.USUARIO c on a.numero_documento=c.nombre_usuario
+JOIN DATA_PRAXIS.USUARIO c on CONVERT(VARCHAR,a.numero_documento)=c.nombre_usuario
 
 commit tran
 
