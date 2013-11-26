@@ -523,8 +523,9 @@ INSERT INTO DATA_PRAXIS.ROL (nombre_rol, id_estado_rol)
 
 INSERT INTO DATA_PRAXIS.FUNCIONALIDAD
 	VALUES 
-	('Alta',1),
-	('Baja',1)
+	('ABMAfiliados',1),
+	('ABMAfiliados',1),
+	('ABMAfiliados',1),('ABMAfiliados',1),('ABMAfiliados',1),
 
 	
 INSERT INTO DATA_PRAXIS.ROL_FUNCIONALIDAD
