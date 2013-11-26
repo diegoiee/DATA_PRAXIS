@@ -519,13 +519,21 @@ INSERT INTO DATA_PRAXIS.ROL (nombre_rol, id_estado_rol)
 	VALUES
  ('Afiliado',1),
 ('Profesional',1),
-('Administrativo',1)
+('Administrativo',1),
+('Administrador General',1)
 
 INSERT INTO DATA_PRAXIS.FUNCIONALIDAD
 	VALUES 
 	('ABMAfiliados',1),
-	('ABMAfiliados',1),
-	('ABMAfiliados',1),('ABMAfiliados',1),('ABMAfiliados',1),
+	('ABMProfesionales',1),
+	('RegistrarAgenda',1),
+	('CompraBonos',1),
+	('PedirTurno',1),
+	('RegistrarLlegada',1),
+	('RegistrarResultadoAtMedica',1),
+	('RecetaMedica',1),
+	('Estadisticas',1),
+	('CancelarAtencionMedica',1)
 
 	
 INSERT INTO DATA_PRAXIS.ROL_FUNCIONALIDAD
