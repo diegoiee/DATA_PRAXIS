@@ -2,6 +2,9 @@ USE GD2C2013
 
 begin tran
 
+IF OBJECT_ID('DATA_PRAXIS.[estadistica3]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].estadistica3
+
 IF OBJECT_ID('DATA_PRAXIS.[estadistica4]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].estadistica4
 
@@ -700,7 +703,26 @@ COMMIT TRAN T2
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-go
+
+GO
+
+CREATE procedure [DATA_PRAXIS].[estadistica3] 
+@fecha_inicio varchar(20),
+@fecha_fin varchar(20)
+as
+begin
+select top 5 DATEPART(MONTH,fecha_turno)as 'mes',descripcion_especialidad, COUNT(*) as 'cant' from (SELECT distinct id_receta,id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) a
+                            join DATA_PRAXIS.RECETA b on a.id_receta=b.id_receta
+                            join DATA_PRAXIS.CONSULTA c on c.id_consulta=b.id_consulta
+                            join DATA_PRAXIS.TURNO d on d.id_turno=c.id_turno
+                            join DATA_PRAXIS.AGENDA e on e.id_agenda=d.id_agenda
+                            join DATA_PRAXIS.ESPECIALIDAD f on e.id_especialidad=f.id_especialidad
+                            where e.fecha_turno between @fecha_inicio and @fecha_fin
+                            group by DATEPART(MONTH,fecha_turno),descripcion_especialidad
+                            order by 3 desc
+end
+GO
+
 CREATE procedure [DATA_PRAXIS].[estadistica4] 
 @fecha_inicio varchar(20),
 @fecha_fin varchar(20) 
