@@ -2,6 +2,9 @@ USE GD2C2013
 
 begin tran
 
+IF OBJECT_ID('DATA_PRAXIS.[estadistica4]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].CREAR_USUARIOS
+
 IF OBJECT_ID('DATA_PRAXIS.[CREAR_USUARIOS]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].CREAR_USUARIOS
 
@@ -697,6 +700,40 @@ COMMIT TRAN T2
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+go
+CREATE procedure [DATA_PRAXIS].[estadistica4] 
+@fecha_inicio varchar(20),
+@fecha_fin varchar(20) 
+as
+
+begin
+select top 10 datepart(month,fecha_turno),a.id_afiliado, count(*) from ( --se podria haber echo todo en un solo paso
+select fecha_turno,g.id_afiliado,b.id_bono_farmacia--aca meto los bonos farmacia
+from DATA_PRAXIS.BONO_FARMACIA a
+join DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA b on a.id_bono_farmacia=b.id_bono_farmacia
+join DATA_PRAXIS.RECETA c on b.id_receta=c.id_receta
+join DATA_PRAXIS.CONSULTA d on d.id_consulta=c.id_consulta
+join DATA_PRAXIS.TURNO e on e.id_turno=d.id_turno
+join DATA_PRAXIS.AGENDA z on z.id_agenda=e.id_agenda
+join DATA_PRAXIS.AFILIADO g on g.id_afiliado=e.id_afiliado
+join DATA_PRAXIS.BONO_COMPRA f on a.id_bono_compra=f.id_bono_compra
+where fecha_turno between @fecha_inicio and @fecha_fin and  g.id_afiliado <> f.id_afiliado
+
+union
+
+SELECT fecha_turno,d.id_afiliado,b.id_bono_consulta--aca meto los bonos consulta 
+FROM DATA_PRAXIS.consulta a 
+join DATA_PRAXIS.bono_consulta b on b.id_bono_consulta=a.id_bono_consulta
+join DATA_PRAXIS.turno c on c.id_turno=a.id_turno
+join DATA_PRAXIS.AGENDA z on z.id_agenda=c.id_agenda
+join DATA_PRAXIS.afiliado d on d.id_afiliado=c.id_afiliado
+join DATA_PRAXIS.bono_compra e on e.id_bono_compra=b.id_bono_compra--(por id_compra contra la tabla bono_consulta)
+WHERE fecha_turno between @fecha_inicio and @fecha_fin and c.id_afiliado <> e.id_afiliado
+) a
+group by datepart(month,fecha_turno),id_afiliado
+end
+
+
 go
 CREATE PROCEDURE [DATA_PRAXIS].[TRAER_TURNOS_DE_AFILIADO]
 @ID_AFILIADO BIGINT
