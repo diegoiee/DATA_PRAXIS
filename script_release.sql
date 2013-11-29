@@ -2,6 +2,9 @@ USE GD2C2013
 
 begin tran
 
+IF OBJECT_ID('DATA_PRAXIS.[estadistica2]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].estadistica2
+
 IF OBJECT_ID('DATA_PRAXIS.[estadistica3]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].estadistica3
 
@@ -721,6 +724,27 @@ select top 5 DATEPART(MONTH,fecha_turno)as 'mes',descripcion_especialidad, COUNT
                             group by DATEPART(MONTH,fecha_turno),descripcion_especialidad
                             order by 3 desc
 end
+
+GO
+
+CREATE procedure [DATA_PRAXIS].[estadistica2] --bonos farmacia vencidos
+@fecha_inicio varchar(20),
+@fecha_fin varchar(20),
+@fecha_actual varchar(20)
+as
+begin
+SELECT TOP 5 DATEPART(MONTH,DATEADD(DAY,60,b.fecha_compra)) as 'mes',c.id_afiliado, count(*) as 'cantidad' 
+FROM DATA_PRAXIS.BONO_FARMACIA a 
+JOIN DATA_PRAXIS.bono_compra b on a.id_bono_compra=b.id_bono_compra 
+JOIN DATA_PRAXIS.afiliado c on b.id_afiliado=c.id_afiliado 
+WHERE id_bono_farmacia not in (select id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) and   
+DATEADD(DAY,60,b.fecha_compra) < @fecha_actual and DATEADD(DAY,60,b.fecha_compra) between @fecha_inicio and @fecha_fin
+GROUP BY c.id_afiliado,DATEPART(MONTH,DATEADD(DAY,60,b.fecha_compra))
+                            
+                   
+end
+
+
 GO
 
 CREATE procedure [DATA_PRAXIS].[estadistica4] 
