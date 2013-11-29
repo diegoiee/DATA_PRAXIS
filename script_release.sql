@@ -2,6 +2,9 @@ USE GD2C2013
 
 begin tran
 
+IF OBJECT_ID('DATA_PRAXIS.[estadistica1]', 'P') IS NOT NULL
+DROP PROC [DATA_PRAXIS].estadistica1
+
 IF OBJECT_ID('DATA_PRAXIS.[estadistica2]', 'P') IS NOT NULL
 DROP PROC [DATA_PRAXIS].estadistica2
 
@@ -743,6 +746,24 @@ GROUP BY c.id_afiliado,DATEPART(MONTH,DATEADD(DAY,60,b.fecha_compra))
                             
                    
 end
+
+GO
+
+CREATE procedure [DATA_PRAXIS].[estadistica1] --cancelaciones
+@fecha_inicio varchar(20),
+@fecha_fin varchar(20),
+@fecha_actual varchar(20)
+as
+begin
+
+SELECT TOP 5 DATEPART(MONTH,fecha_turno) as 'mes',a.[id_especialidad ] ,COUNT(*) 
+FROM DATA_PRAXIS.TURNO_CANCELADO_HIST a
+where fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin
+group by DATEPART(MONTH,fecha_turno),a.[id_especialidad ]                                                      
+                          
+                   
+end
+
 
 
 GO
