@@ -254,7 +254,7 @@ CREATE TABLE DATA_PRAXIS.ESTADO_TURNO ( --OK
 CREATE TABLE DATA_PRAXIS.ROL (
         id_rol INT IDENTITY(1,1) PRIMARY KEY,
         nombre_rol VARCHAR(50) NOT NULL,
-        id_estado_rol TINYINT NOT NULL DEFAULT 1   --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
+        id_estado_rol TINYINT NOT NULL DEFAULT 1 FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_ROL(id_estado_rol)  --Motivo para TINYINT y no BIT, escalabilidad. 0=Inactivo, 1=Activo.
 )
 
 CREATE TABLE DATA_PRAXIS.FUNCIONALIDAD (
@@ -388,7 +388,7 @@ CREATE TABLE DATA_PRAXIS.AGENDA(
         id_horario_turno TINYINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.HORARIO_TURNO (id_horario_turno),
         id_profesional BIGINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.PROFESIONAL (id_profesional),
         id_especialidad  numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.ESPECIALIDAD (id_especialidad),
-        id_estado_turno int null  
+        id_estado_turno TINYINT null  FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_TURNO (id_estado_turno)
 )
 
 CREATE TABLE [DATA_PRAXIS].[TURNO]( 
