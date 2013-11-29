@@ -714,17 +714,19 @@ GO
 
 CREATE procedure [DATA_PRAXIS].[estadistica3] 
 @fecha_inicio varchar(20),
-@fecha_fin varchar(20)
+@fecha_fin varchar(20),
+@fecha_actual varchar(20)
 as
 begin
-select top 5 DATEPART(MONTH,fecha_turno)as 'mes',descripcion_especialidad, COUNT(*) as 'cant' from (SELECT distinct id_receta,id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) a
+SET LANGUAGE Español
+select top 5 datename(month,fecha_turno)as 'mes',descripcion_especialidad, COUNT(*) as 'cantidad' from (SELECT distinct id_receta,id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) a
                             join DATA_PRAXIS.RECETA b on a.id_receta=b.id_receta
                             join DATA_PRAXIS.CONSULTA c on c.id_consulta=b.id_consulta
                             join DATA_PRAXIS.TURNO d on d.id_turno=c.id_turno
                             join DATA_PRAXIS.AGENDA e on e.id_agenda=d.id_agenda
                             join DATA_PRAXIS.ESPECIALIDAD f on e.id_especialidad=f.id_especialidad
-                            where e.fecha_turno between @fecha_inicio and @fecha_fin
-                            group by DATEPART(MONTH,fecha_turno),descripcion_especialidad
+                            where  e.fecha_turno<@fecha_actual and e.fecha_turno between @fecha_inicio and @fecha_fin
+                            group by datename(month,fecha_turno),descripcion_especialidad
                             order by 3 desc
 end
 
@@ -736,15 +738,15 @@ CREATE procedure [DATA_PRAXIS].[estadistica2] --bonos farmacia vencidos
 @fecha_actual varchar(20)
 as
 begin
-SELECT TOP 5 DATEPART(MONTH,DATEADD(DAY,60,b.fecha_compra)) as 'mes',c.id_afiliado, count(*) as 'cantidad' 
+SET LANGUAGE Español
+SELECT TOP 5 DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra)) as 'mes',c.id_afiliado, count(*) as 'cantidad' 
 FROM DATA_PRAXIS.BONO_FARMACIA a 
 JOIN DATA_PRAXIS.bono_compra b on a.id_bono_compra=b.id_bono_compra 
 JOIN DATA_PRAXIS.afiliado c on b.id_afiliado=c.id_afiliado 
 WHERE id_bono_farmacia not in (select id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) and   
 DATEADD(DAY,60,b.fecha_compra) < @fecha_actual and DATEADD(DAY,60,b.fecha_compra) between @fecha_inicio and @fecha_fin
-GROUP BY c.id_afiliado,DATEPART(MONTH,DATEADD(DAY,60,b.fecha_compra))
-                            
-                   
+GROUP BY c.id_afiliado,DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra))
+
 end
 
 GO
@@ -755,11 +757,11 @@ CREATE procedure [DATA_PRAXIS].[estadistica1] --cancelaciones
 @fecha_actual varchar(20)
 as
 begin
-
-SELECT TOP 5 DATEPART(MONTH,fecha_turno) as 'mes',a.[id_especialidad ] ,COUNT(*) 
+SET LANGUAGE Español
+SELECT TOP 5 DATENAME(MONTH,fecha_turno) as 'mes',a.[id_especialidad ] ,COUNT(*) 
 FROM DATA_PRAXIS.TURNO_CANCELADO_HIST a
 where fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin
-group by DATEPART(MONTH,fecha_turno),a.[id_especialidad ]                                                      
+group by DATENAME(MONTH,fecha_turno),a.[id_especialidad ]                                                      
                           
                    
 end
@@ -770,11 +772,13 @@ GO
 
 CREATE procedure [DATA_PRAXIS].[estadistica4] 
 @fecha_inicio varchar(20),
-@fecha_fin varchar(20) 
+@fecha_fin varchar(20),
+@fecha_actual varchar(20)
 as
 
 begin
-select top 10 datepart(month,fecha_turno),a.id_afiliado, count(*) from ( --se podria haber echo todo en un solo paso
+SET LANGUAGE Español
+select top 10 datename(month,fecha_turno),a.id_afiliado, count(*) as 'cantidad' from ( --se podria haber echo todo en un solo paso
 select fecha_turno,g.id_afiliado,b.id_bono_farmacia--aca meto los bonos farmacia
 from DATA_PRAXIS.BONO_FARMACIA a
 join DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA b on a.id_bono_farmacia=b.id_bono_farmacia
@@ -784,7 +788,7 @@ join DATA_PRAXIS.TURNO e on e.id_turno=d.id_turno
 join DATA_PRAXIS.AGENDA z on z.id_agenda=e.id_agenda
 join DATA_PRAXIS.AFILIADO g on g.id_afiliado=e.id_afiliado
 join DATA_PRAXIS.BONO_COMPRA f on a.id_bono_compra=f.id_bono_compra
-where fecha_turno between @fecha_inicio and @fecha_fin and  g.id_afiliado <> f.id_afiliado
+where fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin and g.id_afiliado <> f.id_afiliado
 
 union
 
@@ -795,9 +799,9 @@ join DATA_PRAXIS.turno c on c.id_turno=a.id_turno
 join DATA_PRAXIS.AGENDA z on z.id_agenda=c.id_agenda
 join DATA_PRAXIS.afiliado d on d.id_afiliado=c.id_afiliado
 join DATA_PRAXIS.bono_compra e on e.id_bono_compra=b.id_bono_compra--(por id_compra contra la tabla bono_consulta)
-WHERE fecha_turno between @fecha_inicio and @fecha_fin and c.id_afiliado <> e.id_afiliado
+WHERE fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin and c.id_afiliado <> e.id_afiliado
 ) a
-group by datepart(month,fecha_turno),id_afiliado
+group by datename(month,fecha_turno),id_afiliado
 end
 
 
