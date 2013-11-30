@@ -678,7 +678,7 @@ COMMIT TRAN T1
 BEGIN TRAN T2
 go
 CREATE VIEW DATA_PRAXIS.VISTA_PROFESIONALES AS 
-SELECT PROF.id_profesional,PERSONA.id_persona,PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', PROF.matricula
+SELECT PROF.id_profesional,PERSONA.id_persona,PERSONA.apellido,PERSONA.nombre, TD.descripcion_tipo_documento AS 'tipo_documento', PERSONA.numero_documento, PERSONA.direccion, PERSONA.telefono, PERSONA.mail, PERSONA.fecha_nacimiento,  SX.descripcion_sexo AS 'sexo', PROF.matricula,PROF.fecha_de_baja
 FROM DATA_PRAXIS.PERSONA PERSONA
 JOIN DATA_PRAXIS.PROFESIONAL PROF ON PERSONA.id_persona = PROF.id_persona
 LEFT JOIN DATA_PRAXIS.TIPO_DOCUMENTO TD ON PERSONA.id_tipo_documento = TD.id_tipo_documento
