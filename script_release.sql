@@ -841,9 +841,9 @@ BEGIN TRAN T1
    WHERE id_turno = @id_turno
  
   INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST
-  (fecha_turno, id_horario_turno, id_profesional, id_consulta, id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion) 
+  (fecha_turno, id_horario_turno, id_profesional, id_consulta, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion) 
  
- SELECT A.fecha_turno, A.id_horario_turno,A.id_profesional,NULL, @id_turno, T.id_afiliado,A.id_especialidad, @tipo_cancelacion, @motivo_cancelacion
+ SELECT A.fecha_turno, A.id_horario_turno,A.id_profesional,NULL, T.id_afiliado,A.id_especialidad, @tipo_cancelacion, @motivo_cancelacion
  FROM DATA_PRAXIS.AGENDA A
  JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda 
  WHERE id_turno = @id_turno
