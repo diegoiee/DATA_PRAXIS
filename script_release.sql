@@ -820,11 +820,10 @@ SELECT T.id_turno, A.fecha_turno, H.horario_turno, PE.apellido, PE.nombre, E.des
                                    JOIN DATA_PRAXIS.HORARIO_TURNO H ON A.id_horario_turno = H.id_horario_turno
                                    JOIN DATA_PRAXIS.PROFESIONAL PR ON A.id_profesional = PR.id_profesional
                                    JOIN DATA_PRAXIS.PERSONA PE ON PE.id_persona = PR.id_persona
-                                   JOIN DATA_PRAXIS.AFILIADO AFIL on AFIL.id_persona=PE.id_persona
                                    JOIN DATA_PRAXIS.ESPECIALIDAD E ON A.id_especialidad = E.id_especialidad
                                    JOIN DATA_PRAXIS.TIPO_ESPECIALIDAD TE ON E.id_tipo_especialidad = TE.id_tipo_especialidad
-                                   WHERE T.id_afiliado = @ID_AFILIADO and 
-                                   AFIL.fecha_baja is null
+                                   WHERE T.id_afiliado = @ID_AFILIADO and T.id_afiliado in (select id_afiliado FROM DATA_PRAXIS.AFILIADO where fecha_baja is null)
+                                   
 ) as alias
 WHERE alias.id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
 END  
