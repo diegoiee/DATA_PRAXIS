@@ -879,7 +879,7 @@ SELECT fecha_turno, id_horario_turno, id_profesional, T.id_afiliado, A.id_especi
 	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
 	 where A.id_profesional = @ID_PROFESIONAL AND
 				A.fecha_turno = @FECHA1 AND
-				A.id_estado_turno <> 3
+				A.id_estado_turno <> 3 
 				
 UPDATE DATA_PRAXIS.AGENDA 
 SET id_estado_turno = 3
@@ -891,7 +891,7 @@ DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
 	FROM DATA_PRAXIS.AGENDA A 
 	 where A.id_profesional=@ID_PROFESIONAL AND
 				A.fecha_turno =@FECHA1 
-				)
+				) 
 
 commit tran t3
 
@@ -918,8 +918,7 @@ DELETE FROM DATA_PRAXIS.TURNO  WHERE id_agenda IN (
 	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
 	WHERE A.id_profesional=@ID_PROFESIONAL AND
 				A.fecha_turno >= @FECHA1 AND
-				A.fecha_turno <= @FECHA2 AND 
-				 T.id_turno IN (SELECT id_turno	FROM DATA_PRAXIS.CONSULTA)
+				A.fecha_turno <= @FECHA2 
 )
 
 UPDATE DATA_PRAXIS.AGENDA 
