@@ -434,16 +434,16 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
  )
   
  CREATE TABLE DATA_PRAXIS.TURNO_CANCELADO_HIST  (
-  [fecha_turno] [DATE] not null,
-  [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
-   [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
-  [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
-  [id_turno] [numeric](18,0) null,
-   [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
-   [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
-  [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
-  [motivo_cancelacion] VARCHAR(255) NOT NULL, 
-  constraint pk_turno_cancelado primary key(fecha_turno,id_horario_turno,id_profesional)
+ id_turno_cancelado bigint identity(1,1) primary key,
+ [fecha_turno] [DATE] not null,
+ [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
+ [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
+ [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
+ [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
+ [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
+ [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
+ [motivo_cancelacion] VARCHAR(255) NOT NULL 
+  
 )
 
 CREATE INDEX IX_PERSONA_numero_documento
@@ -873,8 +873,8 @@ begin tran t3
 
 
 
-INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
-SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado, A.id_especialidad, 1,@MOTIVO
+INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
+SELECT fecha_turno, id_horario_turno, id_profesional, T.id_afiliado, A.id_especialidad, 1,@MOTIVO
 	FROM DATA_PRAXIS.AGENDA A 
 	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
 	 where A.id_profesional = @ID_PROFESIONAL AND
@@ -902,8 +902,8 @@ BEGIN
 begin tran t4
 
 
-INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_turno, id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
-SELECT fecha_turno, id_horario_turno, id_profesional, T.id_turno, T.id_afiliado, A.id_especialidad, 1,@MOTIVO
+INSERT INTO DATA_PRAXIS.TURNO_CANCELADO_HIST (fecha_turno, id_horario_turno, id_profesional,  id_afiliado, [id_especialidad ], id_tipo_cancelacion, motivo_cancelacion)
+SELECT fecha_turno, id_horario_turno, id_profesional,T.id_afiliado, A.id_especialidad, 1,@MOTIVO
 	FROM DATA_PRAXIS.AGENDA A 
 	JOIN DATA_PRAXIS.TURNO T ON A.id_agenda = T.id_agenda
 	 where A.id_profesional=@ID_PROFESIONAL AND
