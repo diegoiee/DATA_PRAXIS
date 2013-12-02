@@ -269,7 +269,7 @@ CREATE TABLE DATA_PRAXIS.FUNCIONALIDAD (
 
 CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	id_persona BIGINT IDENTITY(1,1) PRIMARY KEY,
-	id_tipo_documento TINYINT  FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_DOCUMENTO  (id_tipo_documento),
+	id_tipo_documento TINYINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_DOCUMENTO  (id_tipo_documento),
 	numero_documento NUMERIC(18,0) NOT NULL, 	--paciente_dni o medico_dni
 	nombre VARCHAR(255) NOT NULL,	         	--paciente_nombre o medico_nombre
 	apellido VARCHAR(255) NOT NULL,          	--paciente_apellido o medico_apellido
@@ -277,14 +277,14 @@ CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	direccion VARCHAR(255) NOT NULL,          	--paciente_direccion o medico_direccion
 	mail VARCHAR(255) NOT NULL,              	--paciente_mail o medico_mail
 	fecha_nacimiento DATETIME NOT NULL,      	--paciente_fecha_nac o medico_fecha_nac
-	id_sexo TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.SEXO (id_sexo),
+	id_sexo TINYINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.SEXO (id_sexo),
 	cantidad_familiares_a_cargo INT  NOT NULL DEFAULT 0,
-	id_estado_civil TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
+	id_estado_civil not null TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
 )
 
 CREATE TABLE [DATA_PRAXIS].[ESTADO_USUARIO] (-- revisar longitud password
         [id_estado_usuario] [TINYINT] PRIMARY KEY  ,
-        estado_usuario varchar(255)
+        estado_usuario varchar(255) not null
 )
 
 CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
@@ -293,7 +293,7 @@ CREATE TABLE [DATA_PRAXIS].[USUARIO] (-- revisar longitud password
         [nombre_usuario] [VARCHAR](255)  NOT NULL,  
         [clave_usuario] [VARCHAR](255) NOT NULL,
         [intentos_ingreso] [int] NOT NULL DEFAULT 0,
-        [id_estado_usuario] [TINYINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario) DEFAULT 1
+        [id_estado_usuario] [TINYINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESTADO_USUARIO] (id_estado_usuario) DEFAULT 1
 )
 
 CREATE TABLE [DATA_PRAXIS].[ROL_FUNCIONALIDAD](--OK
@@ -308,10 +308,10 @@ CREATE TABLE [DATA_PRAXIS].[USUARIO_ROL]( --OK
 
 CREATE TABLE DATA_PRAXIS.PLAN_MEDICO ( --OK
 	id_plan_medico NUMERIC(18,0) PRIMARY KEY,      --plan_med_codigo
-	desc_plan_medico VARCHAR(255) NULL,            --plan_med_descripcion
-	precio_bono_consulta numeric(18,0),            --plan_med_precio_bono_consulta
+	desc_plan_medico VARCHAR(255) NOT NULL,            --plan_med_descripcion
+	precio_bono_consulta numeric(18,0) not null,            --plan_med_precio_bono_consulta
 	fecha_asiento_precio_bono_consulta DATETIME,   
-	precio_bono_farmacia numeric(18,0),            --plan_med_precio_bono_farmacia
+	precio_bono_farmacia numeric(18,0) not null,            --plan_med_precio_bono_farmacia
 	fecha_asiento_precio_bono_farmacia DATETIME
 )
 
@@ -343,7 +343,7 @@ CREATE TABLE DATA_PRAXIS.TIPO_ESPECIALIDAD( --OK
 
 CREATE TABLE DATA_PRAXIS.ESPECIALIDAD( --OK
 	id_especialidad NUMERIC(18,0) PRIMARY KEY,
-	id_tipo_especialidad NUMERIC (18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
+	id_tipo_especialidad NUMERIC (18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.TIPO_ESPECIALIDAD (ID_TIPO_ESPECIALIDAD),
 	descripcion_especialidad varchar(255) NOT NULL
 )
 
@@ -367,21 +367,21 @@ CREATE TABLE DATA_PRAXIS.PROFESIONAL_ESPECIALIDAD (--OK
 CREATE TABLE [DATA_PRAXIS].[BONO_COMPRA]( --OK
         id_bono_compra bigint identity(1,1) primary key,
         fecha_compra DATETIME NOT NULL,
-        id_afiliado bigint FOREIGN KEY references DATA_PRAXIS.AFILIADO (id_afiliado),
-        id_plan_medico numeric(18,0) FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
+        id_afiliado bigint not null FOREIGN KEY references DATA_PRAXIS.AFILIADO (id_afiliado),
+        id_plan_medico numeric(18,0) not null FOREIGN KEY references DATA_PRAXIS.PLAN_MEDICO (id_plan_medico),
 )
 
 CREATE TABLE [DATA_PRAXIS].[BONO_CONSULTA](
         id_bono_consulta numeric(18,0) primary key,
-        id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
-        precio_compra numeric(18,2) null,
+        id_bono_compra bigint not null FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
+        precio_compra numeric(18,2) not null,
         numero_consulta int,
         fecha_impresion DATETIME
 )
 
 CREATE TABLE DATA_PRAXIS.MEDICAMENTO  (
 	id_medicamento BIGINT IDENTITY(1,1) PRIMARY KEY,
-	descripcion_medicamento VARCHAR(255)
+	descripcion_medicamento VARCHAR(255) not null
 )
 
 CREATE TABLE DATA_PRAXIS.AGENDA( 
@@ -390,41 +390,41 @@ CREATE TABLE DATA_PRAXIS.AGENDA(
         id_horario_turno TINYINT NOT NULL FOREIGN KEY REFERENCES DATA_PRAXIS.HORARIO_TURNO (id_horario_turno),
         id_profesional BIGINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.PROFESIONAL (id_profesional),
         id_especialidad  numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.ESPECIALIDAD (id_especialidad),
-        id_estado_turno TINYINT null  FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_TURNO (id_estado_turno)
+        id_estado_turno TINYINT not null  FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_TURNO (id_estado_turno)
 )
 
 CREATE TABLE [DATA_PRAXIS].[TURNO]( 
         [id_turno] [numeric](18,0) primary key,
-        id_agenda bigint foreign key references data_praxis.agenda(id_agenda),
-        [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado)
+        id_agenda bigint not null foreign key references data_praxis.agenda(id_agenda),
+        [id_afiliado] [BIGINT] not null foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado)
 )
 
 CREATE TABLE DATA_PRAXIS.CONSULTA ( --OK
         id_consulta BIGINT identity(1,1) PRIMARY KEY,
         id_bono_consulta numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.BONO_CONSULTA (id_bono_consulta),
-	id_turno numeric(18,0) FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
+	id_turno numeric(18,0) not null FOREIGN KEY REFERENCES DATA_PRAXIS.TURNO (id_turno),
         horario_llegada time null,
-        estado_consulta tinyint null, --0 si el medico todavia no cargo los resultados, 1 si la consulta se realizo, 2 si la consulta no se realizo
+        estado_consulta tinyint not null, --0 si el medico todavia no cargo los resultados, 1 si la consulta se realizo, 2 si la consulta no se realizo
         sintomas varchar(255) null,
         diagnostico varchar(255) null
 )
 
 CREATE TABLE DATA_PRAXIS.RECETA  (
 	id_receta BIGINT IDENTITY(1,1) PRIMARY KEY,
-	id_consulta BIGINT FOREIGN KEY references DATA_PRAXIS.CONSULTA (id_consulta)
+	id_consulta BIGINT not null FOREIGN KEY references DATA_PRAXIS.CONSULTA (id_consulta)
 )
 
 CREATE TABLE DATA_PRAXIS.BONO_FARMACIA( --OK
 	id_bono_farmacia numeric(18,0) primary key,
-	id_bono_compra bigint FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
-	precio_compra numeric(18,2) null,
+	id_bono_compra bigint not null FOREIGN KEY references DATA_PRAXIS.BONO_COMPRA (id_bono_compra),
+	precio_compra numeric(18,2) not null,
 	fecha_impresion datetime
 )
 
 CREATE TABLE DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA  (
-	id_receta BIGINT FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
-	id_medicamento BIGINT FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
-	id_bono_farmacia numeric(18,0) FOREIGN KEY references DATA_PRAXIS.BONO_FARMACIA (id_bono_farmacia),
+	id_receta BIGINT not null FOREIGN KEY references DATA_PRAXIS.RECETA (id_receta),
+	id_medicamento BIGINT not null FOREIGN KEY references DATA_PRAXIS.MEDICAMENTO (id_medicamento),
+	id_bono_farmacia numeric(18,0) not null FOREIGN KEY references DATA_PRAXIS.BONO_FARMACIA (id_bono_farmacia),
 	cantidad_medicamento tinyint not null default 1
 )
 
@@ -439,9 +439,9 @@ CREATE TABLE DATA_PRAXIS.TIPO_CANCELACION ( --OK
  [id_horario_turno] [TINYINT] NOT NULL FOREIGN KEY REFERENCES [DATA_PRAXIS].[HORARIO_TURNO] (id_horario_turno),
  [id_profesional] [BIGINT] not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[PROFESIONAL] (id_profesional),
  [id_consulta] [BIGINT] FOREIGN KEY REFERENCES [DATA_PRAXIS].[CONSULTA](id_consulta),
- [id_afiliado] [BIGINT] foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
+ [id_afiliado] [BIGINT] not null foreign key references [DATA_PRAXIS].[AFILIADO] (id_afiliado),
  [id_especialidad ] [numeric](18,0) not null FOREIGN KEY REFERENCES [DATA_PRAXIS].[ESPECIALIDAD] (id_especialidad),
- [id_tipo_cancelacion] TINYINT  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
+ [id_tipo_cancelacion] TINYINT not null  FOREIGN KEY REFERENCES [DATA_PRAXIS].[TIPO_CANCELACION] (id_tipo_cancelacion),
  [motivo_cancelacion] VARCHAR(255) NOT NULL 
   
 )
