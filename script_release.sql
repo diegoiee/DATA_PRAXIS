@@ -279,7 +279,7 @@ CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	fecha_nacimiento DATETIME NOT NULL,      	--paciente_fecha_nac o medico_fecha_nac
 	id_sexo TINYINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.SEXO (id_sexo),
 	cantidad_familiares_a_cargo INT  NOT NULL DEFAULT 0,
-	id_estado_civil not null TINYINT FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
+	id_estado_civil TINYINT not null  FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
 )
 
 CREATE TABLE [DATA_PRAXIS].[ESTADO_USUARIO] (-- revisar longitud password
@@ -513,7 +513,7 @@ INSERT INTO DATA_PRAXIS.TIPO_DOCUMENTO (id_tipo_documento, descripcion_tipo_docu
 ------------
 
 INSERT INTO DATA_PRAXIS.SEXO (id_sexo, descripcion_sexo)
-	VALUES(1,'MUJER'),(2,'HOMBRE')
+	VALUES(1,'MUJER'),(2,'HOMBRE'),(3,'No Especificado')
 
 
 
@@ -664,7 +664,7 @@ values
 -------------------
 
 INSERT INTO DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil, descripcion_estado_civil)
-VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concubino/a')
+VALUES (1,'Soltero/a'),(2,'Casado/a'),(3,'Divorciado/a'),(4,'Viudo/a'),(5,'Concubino/a'),(6,'No Especificado')
 
 --Estado-Turno --OK
 -------------------
@@ -964,9 +964,9 @@ ISNULL(medico_telefono,paciente_telefono),
 ISNULL(medico_direccion,paciente_direccion),
 ISNULL(medico_mail,paciente_mail),
 ISNULL(medico_fecha_nac,paciente_fecha_nac),
-NULL,  --id_sexo
+3,  --id_sexo
 0,     --cant familiares a cargo
-NULL --id_estado_civil
+6 --id_estado_civil
 FROM gd_esquema.Maestra
 
 END
