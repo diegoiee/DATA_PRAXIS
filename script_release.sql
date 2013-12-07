@@ -280,6 +280,7 @@ CREATE TABLE DATA_PRAXIS.PERSONA ( --OK
 	id_sexo TINYINT not null FOREIGN KEY REFERENCES DATA_PRAXIS.SEXO (id_sexo),
 	cantidad_familiares_a_cargo INT  NOT NULL DEFAULT 0,
 	id_estado_civil TINYINT not null  FOREIGN KEY REFERENCES DATA_PRAXIS.ESTADO_CIVIL (id_estado_civil)
+	CONSTRAINT numero_documento_unico UNIQUE(id_tipo_documento,numero_documento)
 )
 
 CREATE TABLE [DATA_PRAXIS].[ESTADO_USUARIO] (-- revisar longitud password
