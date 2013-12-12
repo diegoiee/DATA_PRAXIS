@@ -792,7 +792,7 @@ join DATA_PRAXIS.TURNO e on e.id_turno=d.id_turno
 join DATA_PRAXIS.AGENDA z on z.id_agenda=e.id_agenda
 join DATA_PRAXIS.AFILIADO g on g.id_afiliado=e.id_afiliado
 join DATA_PRAXIS.BONO_COMPRA f on a.id_bono_compra=f.id_bono_compra
-where fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin and g.id_afiliado <> f.id_afiliado
+where  fecha_turno between @fecha_inicio and @fecha_fin and g.id_afiliado <> f.id_afiliado -- and fecha_turno <= @fecha_actual
 
 union
 
@@ -803,7 +803,7 @@ join DATA_PRAXIS.turno c on c.id_turno=a.id_turno
 join DATA_PRAXIS.AGENDA z on z.id_agenda=c.id_agenda
 join DATA_PRAXIS.afiliado d on d.id_afiliado=c.id_afiliado
 join DATA_PRAXIS.bono_compra e on e.id_bono_compra=b.id_bono_compra--(por id_compra contra la tabla bono_consulta)
-WHERE fecha_turno < @fecha_actual and fecha_turno between @fecha_inicio and @fecha_fin and c.id_afiliado <> e.id_afiliado
+WHERE  fecha_turno between @fecha_inicio and @fecha_fin and c.id_afiliado <> e.id_afiliado --and fecha_turno <= @fecha_actual 
 ) a
 group by datename(month,fecha_turno),id_afiliado
 end
