@@ -741,7 +741,7 @@ CREATE procedure [DATA_PRAXIS].[estadistica2] --bonos farmacia vencidos
 @fecha_fin varchar(20),
 @fecha_actual varchar(20)
 as
-begin
+/*begin
 SET LANGUAGE Español
 SELECT TOP 5 DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra)) as 'mes',c.id_afiliado, count(*) as 'cantidad' 
 FROM DATA_PRAXIS.BONO_FARMACIA a 
@@ -749,8 +749,19 @@ JOIN DATA_PRAXIS.bono_compra b on a.id_bono_compra=b.id_bono_compra
 JOIN DATA_PRAXIS.afiliado c on b.id_afiliado=c.id_afiliado 
 WHERE id_bono_farmacia not in (select id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA) and   
 DATEADD(DAY,60,b.fecha_compra) < @fecha_actual and DATEADD(DAY,60,b.fecha_compra) between @fecha_inicio and @fecha_fin
-GROUP BY c.id_afiliado,DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra))
+GROUP BY c.id_afiliado,DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra))*/
 
+
+begin
+SET LANGUAGE Español
+SELECT TOP 5 DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra)) as 'mes',c.id_afiliado , count(*) as 'cantidad' 
+FROM DATA_PRAXIS.BONO_FARMACIA a 
+JOIN DATA_PRAXIS.bono_compra b on a.id_bono_compra=b.id_bono_compra 
+JOIN DATA_PRAXIS.afiliado c on b.id_afiliado=c.id_afiliado 
+WHERE   b.fecha_compra < dateadd(day,-60,@fecha_actual) and 
+		b.fecha_compra between dateadd(day,-61,@fecha_inicio) and dateadd(day,-61,@fecha_fin) 
+		and id_bono_farmacia not in (select distinct id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA)
+GROUP BY DATENAME(MONTH,DATEADD(DAY,60,b.fecha_compra)),c.id_afiliado
 end
 
 GO
