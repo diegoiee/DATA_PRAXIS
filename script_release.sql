@@ -716,7 +716,7 @@ COMMIT TRAN T2
 
 GO
 
-CREATE procedure [DATA_PRAXIS].[estadistica3] 
+CREATE procedure [DATA_PRAXIS].[estadistica3] --bonos farmacia recetados
 @fecha_inicio varchar(20),
 @fecha_fin varchar(20),
 @fecha_actual varchar(20)
@@ -729,7 +729,7 @@ select top 5 datename(month,fecha_turno)as 'mes',descripcion_especialidad, COUNT
                             join DATA_PRAXIS.TURNO d on d.id_turno=c.id_turno
                             join DATA_PRAXIS.AGENDA e on e.id_agenda=d.id_agenda
                             join DATA_PRAXIS.ESPECIALIDAD f on e.id_especialidad=f.id_especialidad
-                            where  e.fecha_turno<@fecha_actual and e.fecha_turno between @fecha_inicio and @fecha_fin
+                            where  e.fecha_turno between @fecha_inicio and @fecha_fin
                             group by datename(month,fecha_turno),descripcion_especialidad
                             order by 3 desc
 end
