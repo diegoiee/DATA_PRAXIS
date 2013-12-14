@@ -785,7 +785,7 @@ end
 
 GO
 
-CREATE procedure [DATA_PRAXIS].[estadistica4] 
+CREATE procedure [DATA_PRAXIS].[estadistica4] --bonos no usados por sus compradores
 @fecha_inicio varchar(20),
 @fecha_fin varchar(20),
 @fecha_actual varchar(20)
@@ -793,7 +793,7 @@ as
 
 begin
 SET LANGUAGE Español
-select top 10 datename(month,fecha_turno),a.id_afiliado, count(*) as 'cantidad' from ( --se podria haber echo todo en un solo paso
+select top 10 datename(month,fecha_turno) as 'mes',a.id_afiliado, count(*) as 'cantidad' from ( --se podria haber echo todo en un solo paso
 select fecha_turno,g.id_afiliado,b.id_bono_farmacia--aca meto los bonos farmacia
 from DATA_PRAXIS.BONO_FARMACIA a
 join DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA b on a.id_bono_farmacia=b.id_bono_farmacia
