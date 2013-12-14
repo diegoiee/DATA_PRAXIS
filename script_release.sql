@@ -822,7 +822,8 @@ end
 
 go
 CREATE PROCEDURE [DATA_PRAXIS].[TRAER_TURNOS_DE_AFILIADO]
-@ID_AFILIADO BIGINT
+@ID_AFILIADO BIGINT,
+@fecha_actual varchar(20)
 AS
 BEGIN
 SELECT * FROM (
@@ -837,7 +838,7 @@ SELECT T.id_turno, A.fecha_turno, H.horario_turno, PE.apellido, PE.nombre, E.des
                                    WHERE T.id_afiliado = @ID_AFILIADO and T.id_afiliado in (select id_afiliado FROM DATA_PRAXIS.AFILIADO where fecha_baja is null)
                                    
 ) as alias
-WHERE alias.id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
+WHERE alias.fecha_turno > @fecha_actual and alias.id_turno not in (SELECT id_turno from DATA_PRAXIS.CONSULTA)
 END  
 
 go
