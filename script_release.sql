@@ -773,7 +773,7 @@ CREATE procedure [DATA_PRAXIS].[estadistica1] --cancelaciones
 as
 begin
 SET LANGUAGE Español
-SELECT TOP 5 DATENAME(MONTH,fecha_turno) as 'mes',a.[id_especialidad ] ,COUNT(*) 
+SELECT TOP 5 DATENAME(MONTH,fecha_turno) as 'mes',a.[id_especialidad ] ,COUNT(*) as 'cantidad' 
 FROM DATA_PRAXIS.TURNO_CANCELADO_HIST a
 where fecha_turno between @fecha_inicio and @fecha_fin
 group by DATENAME(MONTH,fecha_turno),a.[id_especialidad ]                                                      
