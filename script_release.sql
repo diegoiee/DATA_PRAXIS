@@ -1427,8 +1427,8 @@ SELECT TOP 5 DATENAME(MONTH,DATEADD(DAY,61,b.fecha_compra)) as 'mes',c.id_afilia
 FROM DATA_PRAXIS.BONO_FARMACIA a 
 JOIN DATA_PRAXIS.bono_compra b on a.id_bono_compra=b.id_bono_compra 
 JOIN DATA_PRAXIS.afiliado c on b.id_afiliado=c.id_afiliado 
-WHERE   b.fecha_compra < dateadd(day,-60,@fecha_actual) and 
-		b.fecha_compra between dateadd(day,-61,@fecha_inicio) and dateadd(day,-61,@fecha_fin) 
+WHERE   b.fecha_compra < dateadd(day,-60,@fecha_actualA) and 
+		b.fecha_compra between dateadd(day,-61,@fecha_inicioA) and dateadd(day,-61,@fecha_finA) 
 		and id_bono_farmacia not in (select distinct id_bono_farmacia from DATA_PRAXIS.RECETA_MEDICAMENTO_BONO_FARMACIA)
 GROUP BY DATENAME(MONTH,DATEADD(DAY,61,b.fecha_compra)),c.id_afiliado
 end
